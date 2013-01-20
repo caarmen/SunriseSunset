@@ -19,7 +19,7 @@ public class SunriseSunsetTest {
 			"yyyyMMdd HH:mm:ss z");
 
 	@Test
-	public void test() {
+	public void test1() {
 		test("19760302 15:15:45 UTC", 2442840.1359375);
 		test("19760302 10:15:45 EST", 2442840.1359375);
 		test("19780427 12:00:42 CET", 2443625.9588194);
@@ -36,10 +36,15 @@ public class SunriseSunsetTest {
 		test("19000221 00:00:00 UTC", 2415071.5);
 		test("19000214 00:00:00 UTC", 2415064.5);
 		test("19000201 00:00:00 UTC", 2415051.5);
-		test("19000131 00:03:18 UTC", 2415050.502291667);
-		// test("18800516 10:19:00 UTC", 2407841.929861111);
-		// test("18500712 00:17:18 UTC", 2396950.512013889);
+		test("18800516 10:19:00 UTC", 2407851.929861111);
 		test("18010101 09:00:00 UTC", 2378861.875);
+	}
+
+	@Test
+	public void test2() {
+		test("19000131 00:03:18 UTC", 2415050.502291667);
+		test("18500712 00:17:18 UTC", 2396950.512013889);
+
 	}
 
 	private void test(String gregorianDateStr, double julianDate) {
