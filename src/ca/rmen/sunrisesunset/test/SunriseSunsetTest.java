@@ -59,6 +59,10 @@ public class SunriseSunsetTest {
 		testSunriseSunset("CET", "20130120", 2.351, 48.8567, "08:35", "17:28");
 		testSunriseSunset("Australia/Sydney", "20121225", 151.2111, -33.86,
 				"05:43", "20:07");
+		testSunriseSunset("Japan", "20130501", 139.7036, 35.6938, "04:49",
+				"18:27");
+		testSunriseSunset("Europe/Dublin", "20130605", -6.2675, 53.3441,
+				"05:01", "21:46");
 	}
 
 	private void test(String gregorianDateStr, double julianDate) {
@@ -120,9 +124,9 @@ public class SunriseSunsetTest {
 		String actualSunriseString = format(DATE_FORMAT_MINUTES, actualSunrise);
 		String actualSunsetString = format(DATE_FORMAT_MINUTES, actualSunset);
 		compare(expectedSunrise, expectedSunriseString, actualSunrise,
-				actualSunriseString, 120000);
+				actualSunriseString, 180000);
 		compare(expectedSunset, expectedSunsetString, actualSunset,
-				actualSunsetString, 120000);
+				actualSunsetString, 180000);
 	}
 
 	private Calendar parseDate(TimeZone tz, SimpleDateFormat format,
