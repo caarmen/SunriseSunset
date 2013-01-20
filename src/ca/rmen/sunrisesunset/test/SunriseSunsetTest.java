@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 import junit.framework.Assert;
 
@@ -18,9 +19,9 @@ public class SunriseSunsetTest {
 	private static final SimpleDateFormat DATE_FORMAT_SECONDS = new SimpleDateFormat(
 			"yyyyMMdd HH:mm:ss z");
 	private static final SimpleDateFormat DATE_FORMAT_MINUTES = new SimpleDateFormat(
-			"yyyyMMdd HH:mm z");
+			"yyyyMMdd HH:mm");
 	private static final SimpleDateFormat DATE_FORMAT_DAY = new SimpleDateFormat(
-			"yyyyMMdd z");
+			"yyyyMMdd");
 
 	@Test
 	public void testDateConversions1() {
@@ -53,10 +54,11 @@ public class SunriseSunsetTest {
 	@Test
 	public void testSunriseSunset() {
 
-		testSunriseSunset("20130120 PST", -118.2437, 34.0522,
-				"20130120 06:57 PST", "20130120 17:11 PST");
-		testSunriseSunset("20130120 CET", 2.351, 48.8567, "20130120 08:35 CET",
-				"20130120 17:28 CET");
+		testSunriseSunset("PST", "20130120", -118.2437, 34.0522, "06:57",
+				"17:11");
+		testSunriseSunset("CET", "20130120", 2.351, 48.8567, "08:35", "17:28");
+		testSunriseSunset("Australia/Sydney", "20121225", 151.2111, -33.86,
+				"05:43", "20:07");
 	}
 
 	private void test(String gregorianDateStr, double julianDate) {
@@ -65,7 +67,7 @@ public class SunriseSunsetTest {
 	}
 
 	private void compare(String inputGregorianDateStr, double expectedJulianDate) {
-		Calendar inputGregorianCal = parseDate(DATE_FORMAT_SECONDS,
+		Calendar inputGregorianCal = parseDate(null, DATE_FORMAT_SECONDS,
 				inputGregorianDateStr);
 		double calculatedJulianDate = SunriseSunset
 				.getJulianDate(inputGregorianCal);
@@ -95,43 +97,49 @@ public class SunriseSunsetTest {
 					+ inputJulianDate, calculatedGregorianCal,
 					expectedGregorianCal);
 		} catch (ParseException e) {
+			e.printStackTrace();
 			assertTrue("Error parsing date " + expectedGregorianDateStr, false);
 		}
 	}
 
-	private void testSunriseSunset(String inputDayString,
-			double inputLongitude, double inputLatitude,
+	private void testSunriseSunset(String timeZoneString,
+			String inputDayString, double inputLongitude, double inputLatitude,
 			String expectedSunriseString, String expectedSunsetString) {
-		Calendar inputDay = parseDate(DATE_FORMAT_DAY, inputDayString);
-		inputDay.set(Calendar.HOUR_OF_DAY, 12);
-		Calendar expectedSunrise = parseDate(DATE_FORMAT_MINUTES,
-				expectedSunriseString);
-		Calendar expectedSunset = parseDate(DATE_FORMAT_MINUTES,
-				expectedSunsetString);
-		Calendar[] sunriseSunset = SunriseSunset.getSunriseSunset(inputDay,
-				inputLatitude, inputLongitude);
-		// Truncate the seconds. We only care about precision to the minute.
-		Calendar actualSunrise = sunriseSunset[0];
-		Calendar actualSunset = sunriseSunset[1];
+		TimeZone tz = TimeZone.getTimeZone(timeZoneString);
 
-		String actualSunriseString = format(DATE_FORMAT_SECONDS, actualSunrise);
-		String actualSunsetString = format(DATE_FORMAT_SECONDS, actualSunset);
+		Calendar inputDay = parseDate(tz, DATE_FORMAT_DAY, inputDayString);
+		Calendar[] actualSunriseSunset = SunriseSunset.getSunriseSunset(
+				inputDay, inputLatitude, inputLongitude);
+		Calendar expectedSunrise = parseDate(tz, DATE_FORMAT_MINUTES,
+				inputDayString + " " + expectedSunriseString);
+		Calendar expectedSunset = parseDate(tz, DATE_FORMAT_MINUTES,
+				inputDayString + " " + expectedSunsetString);
+		Calendar actualSunrise = actualSunriseSunset[0];
+		Calendar actualSunset = actualSunriseSunset[1];
+
+		String actualSunriseString = format(DATE_FORMAT_MINUTES, actualSunrise);
+		String actualSunsetString = format(DATE_FORMAT_MINUTES, actualSunset);
 		compare(expectedSunrise, expectedSunriseString, actualSunrise,
 				actualSunriseString, 120000);
 		compare(expectedSunset, expectedSunsetString, actualSunset,
 				actualSunsetString, 120000);
 	}
 
-	private Calendar parseDate(SimpleDateFormat format, String dateString) {
+	private Calendar parseDate(TimeZone tz, SimpleDateFormat format,
+			String dateString) {
 		try {
 			// Use a clone since parsing may change the timezone
 			SimpleDateFormat formatCopy = (SimpleDateFormat) format.clone();
+			if (tz != null)
+				formatCopy.setTimeZone(tz);
 			Date date = formatCopy.parse(dateString);
 			Calendar cal = Calendar.getInstance(formatCopy.getTimeZone());
 			cal.setTime(date);
 			return cal;
 		} catch (ParseException e) {
-			Assert.fail("Could not parse date " + dateString);
+			e.printStackTrace();
+			Assert.fail("Could not parse date " + dateString + " with format "
+					+ format.toPattern());
 			return null;
 		}
 	}

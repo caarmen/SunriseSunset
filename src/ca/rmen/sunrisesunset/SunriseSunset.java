@@ -173,12 +173,18 @@ public class SunriseSunset {
 		System.out.println("getSunriseSunset day="
 				+ DATE_FORMAT.format(day.getTime()) + " latitude=" + latitude
 				+ " longitude=" + longitude);
+		// Set the day to noon
+		Calendar dayAtNoon = (Calendar) day.clone();
+		dayAtNoon.set(Calendar.HOUR_OF_DAY, 12);
+		dayAtNoon.set(Calendar.MINUTE, 0);
+		dayAtNoon.set(Calendar.SECOND, 0);
+		dayAtNoon.set(Calendar.MILLISECOND, 0);
 		final double latitudeRad = Math.toRadians(latitude);
 
 		longitude = -longitude;
 
 		// Get the given date as a Julian date.
-		final double julianDate = getJulianDate(day);
+		final double julianDate = getJulianDate(dayAtNoon);
 
 		// Calculate current Julian cycle (number of days since 2000-01-01).
 		final double nstar = julianDate - JULIAN_DATE_2000_01_01 - CONST_0009
