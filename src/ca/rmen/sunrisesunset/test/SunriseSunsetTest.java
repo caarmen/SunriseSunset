@@ -63,6 +63,8 @@ public class SunriseSunsetTest {
 				"18:27");
 		testSunriseSunset("Europe/Dublin", "20130605", -6.2675, 53.3441,
 				"05:01", "21:46");
+		testSunriseSunset("CST", "20130622", -87.6298, 41.8781, "05:16",
+				"20:29");
 	}
 
 	private void test(String gregorianDateStr, double julianDate) {
