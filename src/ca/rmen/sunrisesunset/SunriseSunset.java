@@ -20,9 +20,11 @@ public class SunriseSunset {
 	 * Converting_Julian_or_Gregorian_calendar_date_to_Julian_Day_Number
 	 * 
 	 * @param gregorianDate
+	 *            Gregorian date in any time zone.
 	 * @return the Julian date for the given Gregorian date.
 	 */
 	public static double getJulianDate(final Calendar gregorianDate) {
+		// Convert the date to the UTC timezone.
 		TimeZone tzUTC = TimeZone.getTimeZone("UTC");
 		Calendar gregorianDateUTC = Calendar.getInstance(tzUTC);
 		gregorianDateUTC.setTimeInMillis(gregorianDate.getTimeInMillis());
@@ -55,8 +57,7 @@ public class SunriseSunset {
 	 * http://en.wikipedia.org/wiki/Julian_day#
 	 * Gregorian_calendar_from_Julian_day_number
 	 * 
-	 * @param julianDate
-	 * @return
+	 * @return a Gregorian date in the local timezone.
 	 */
 	public static Calendar getGregorianDate(final double julianDate) {
 
@@ -140,13 +141,14 @@ public class SunriseSunset {
 		// Ex: 17.208*60 - (17*60 + 12) = 1032.48 - 1032 = 0.48 minutes. 0.48*60
 		// = 28.8 seconds.
 		// We truncate to 28 seconds.
-		final int seconds = (int) ((dayFraction * 24 * 3600 - (hours * 3600 + minutes * 60)) + .01 /*
-																									 * double
-																									 * rounding
-																									 */);
+		final int seconds = (int) ((dayFraction * 24 * 3600 - (hours * 3600 + minutes * 60)) + .5 /*
+																								 * double
+																								 * rounding
+																								 */);
 		gregorianDateUTC.set(Calendar.HOUR_OF_DAY, hours);
 		gregorianDateUTC.set(Calendar.MINUTE, minutes);
 		gregorianDateUTC.set(Calendar.SECOND, seconds);
+		// Convert to a Gregorian date in the local timezone.
 		Calendar gregorianDate = Calendar.getInstance();
 		gregorianDate.setTimeInMillis(gregorianDateUTC.getTimeInMillis());
 		return gregorianDate;
