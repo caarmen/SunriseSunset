@@ -18,8 +18,6 @@
  */
 package ca.rmen.sunrisesunset.test;
 
-import static org.junit.Assert.assertTrue;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -115,8 +113,8 @@ public class SunriseSunsetTest {
 				.getJulianDate(inputGregorianCal);
 		double error = expectedJulianDate - calculatedJulianDate;
 		double absError = Math.abs(error);
-		assertTrue("Expected julian date " + expectedJulianDate + " but got "
-				+ calculatedJulianDate + " for gregorian date "
+		Assert.assertTrue("Expected julian date " + expectedJulianDate
+				+ " but got " + calculatedJulianDate + " for gregorian date "
 				+ inputGregorianDateStr, absError < 0.01);
 	}
 
@@ -151,7 +149,7 @@ public class SunriseSunsetTest {
 					expectedGregorianCal);
 		} catch (ParseException e) {
 			e.printStackTrace();
-			assertTrue("Error parsing date " + expectedGregorianDateStr, false);
+			Assert.fail("Error parsing date " + expectedGregorianDateStr);
 		}
 	}
 
