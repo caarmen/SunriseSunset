@@ -170,9 +170,6 @@ public class SunriseSunset {
 	 */
 	public static Calendar[] getSunriseSunset(final Calendar day,
 			final double latitude, double longitude) {
-		System.out.println("getSunriseSunset day="
-				+ DATE_FORMAT.format(day.getTime()) + " latitude=" + latitude
-				+ " longitude=" + longitude);
 		// Set the day to noon
 		Calendar dayAtNoon = (Calendar) day.clone();
 		/*
@@ -238,9 +235,6 @@ public class SunriseSunset {
 		gregRise.setTimeInMillis(gregRiseUTC.getTimeInMillis());
 		final Calendar gregSet = Calendar.getInstance(day.getTimeZone());
 		gregSet.setTimeInMillis(gregSetUTC.getTimeInMillis());
-		System.out.println("getSunriseSunset res=["
-				+ DATE_FORMAT.format(gregRise.getTime()) + " ,  "
-				+ DATE_FORMAT.format(gregSet.getTime()) + "]");
 		return new Calendar[] { gregRise, gregSet };
 	}
 
@@ -296,7 +290,6 @@ public class SunriseSunset {
 		Calendar sunrise = sunriseSunset[0];
 		Calendar sunset = sunriseSunset[1];
 		Calendar now = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-		System.out.println("isNight now=" + DATE_FORMAT.format(now.getTime()));
 		return now.before(sunrise) || now.after(sunset);
 	}
 }

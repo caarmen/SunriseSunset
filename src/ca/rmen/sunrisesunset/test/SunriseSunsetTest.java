@@ -65,6 +65,25 @@ public class SunriseSunsetTest {
 				"05:01", "21:46");
 		testSunriseSunset("CST", "20130622", -87.6298, 41.8781, "05:16",
 				"20:29");
+		testSunriseSunset("Pacific/Honolulu", "20150827", -157.8583, 21.3069,
+				"06:13", "18:53");
+	}
+
+	@Test
+	public void testIsNight() {
+		logDayOrNight("Honolulu", 21.3069, -157.8583);
+		logDayOrNight("Los Angeles", 34.0522, -118.2437);
+		logDayOrNight("Chicago", 41.8781, -87.6298);
+		logDayOrNight("Dublin", 53.3441, -6.2675);
+		logDayOrNight("Paris", 48.8567, 2.351);
+		logDayOrNight("Tokyo", 35.6938, 139.7036);
+		logDayOrNight("Sydney", -33.86, 151.2111);
+
+	}
+
+	private void logDayOrNight(String name, double latitude, double longitude) {
+		boolean isDay = SunriseSunset.isDay(latitude, longitude);
+		System.out.println(name + ": Currently " + (isDay ? "day" : "night"));
 	}
 
 	private void test(String gregorianDateStr, double julianDate) {
