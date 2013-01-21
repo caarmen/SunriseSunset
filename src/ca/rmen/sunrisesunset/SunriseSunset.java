@@ -3,6 +3,18 @@ package ca.rmen.sunrisesunset;
 import java.util.Calendar;
 import java.util.TimeZone;
 
+/**
+ * Provides methods to determine the sunrise and sunset time of a given
+ * location, or if it is currently day or night at a given location. <br/>
+ * Also provides methods to convert between Greogrian and Julian dates.<br/>
+ * The formulas used by this class are from the Wikipedia articles on Julian Day
+ * and Sunrise Equation. <br/>
+ * {@link http://en.wikipedia.org/wiki/Julian_day} <br/>
+ * {@link http://en.wikipedia.org/wiki/Sunrise_equation}
+ * 
+ * @author Carmen Alvarez
+ * 
+ */
 public class SunriseSunset {
 
 	private static final int JULIAN_DATE_2000_01_01 = 2451545;
@@ -14,9 +26,9 @@ public class SunriseSunset {
 	 * second.
 	 * 
 	 * This is based on the Wikipedia article for Julian day.
-	 * http://en.wikipedia.org/wiki/Julian_day#
 	 * 
-	 * Converting_Julian_or_Gregorian_calendar_date_to_Julian_Day_Number
+	 * {@link http://en.wikipedia.org/wiki/Julian_day#
+	 * Converting_Julian_or_Gregorian_calendar_date_to_Julian_Day_Number}
 	 * 
 	 * @param gregorianDate
 	 *            Gregorian date in any time zone.
@@ -55,8 +67,8 @@ public class SunriseSunset {
 	 * 
 	 * This is based on the Wikipedia article for Julian day.
 	 * 
-	 * http://en.wikipedia.org/wiki/Julian_day#
-	 * Gregorian_calendar_from_Julian_day_number
+	 * {@link http://en.wikipedia.org/wiki/Julian_day#
+	 * Gregorian_calendar_from_Julian_day_number}
 	 * 
 	 * @return a Gregorian date in the local timezone.
 	 */
@@ -148,7 +160,7 @@ public class SunriseSunset {
 	/**
 	 * Calculate the sunrise and sunset times for the given date and given
 	 * location. This is based on the Wikipedia article on the Sunrise equation:
-	 * http://en.wikipedia.org/wiki/Sunrise_equation
+	 * {@link http://en.wikipedia.org/wiki/Sunrise_equation}
 	 * 
 	 * @param day
 	 *            The day for which to calculate sunrise and sunset
@@ -224,7 +236,9 @@ public class SunriseSunset {
 
 	/**
 	 * @param latitude
+	 *            the latitude of the location in degrees.
 	 * @param longitude
+	 *            the longitude of the location in degrees (West is negative)
 	 * @return true if it is currently day at the given location. This returns
 	 *         true if the current time at the location is after the sunrise and
 	 *         before the sunset for that location.
@@ -235,7 +249,9 @@ public class SunriseSunset {
 
 	/**
 	 * @param latitude
+	 *            the latitude of the location in degrees.
 	 * @param longitude
+	 *            the longitude of the location in degrees (West is negative)
 	 * @return true if it is currently night at the given location. This returns
 	 *         true if the current time at the location is after the sunset and
 	 *         before the sunrise for that location.
