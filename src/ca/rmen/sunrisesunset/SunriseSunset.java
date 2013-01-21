@@ -1,9 +1,6 @@
 package ca.rmen.sunrisesunset;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.TimeZone;
 
 public class SunriseSunset {
@@ -12,11 +9,13 @@ public class SunriseSunset {
 	private static final double CONST_0009 = 0.0009;
 	private static final double CONST_360 = 360;
 
-	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
-			"yyyy-MM-dd HH:mm z");
-
 	/**
+	 * Convert a Gregorian calendar date to a Julian date. Accuracy is to the
+	 * second.
+	 * 
+	 * This is based on the Wikipedia article for Julian day.
 	 * http://en.wikipedia.org/wiki/Julian_day#
+	 * 
 	 * Converting_Julian_or_Gregorian_calendar_date_to_Julian_Day_Number
 	 * 
 	 * @param gregorianDate
@@ -52,7 +51,9 @@ public class SunriseSunset {
 
 	/**
 	 * Convert a Julian date to a Gregorian date. The Gregorian date will be in
-	 * the local timezone.
+	 * the local timezone. Accuracy is to the second.
+	 * 
+	 * This is based on the Wikipedia article for Julian day.
 	 * 
 	 * http://en.wikipedia.org/wiki/Julian_day#
 	 * Gregorian_calendar_from_Julian_day_number
@@ -113,26 +114,11 @@ public class SunriseSunset {
 		// let D = d + 1;
 		int day = d + 1;
 
-		// Create a gregorian date at midnight.
-		final Calendar gregorianDateUTC = Calendar.getInstance(TimeZone
-				.getTimeZone("UTC"));
-		gregorianDateUTC.set(Calendar.YEAR, year);
-		gregorianDateUTC.set(Calendar.MONTH, month);
-		gregorianDateUTC.set(Calendar.DAY_OF_MONTH, (int) day);
-		gregorianDateUTC.set(Calendar.HOUR_OF_DAY, 0);
-		gregorianDateUTC.set(Calendar.MINUTE, 0);
-		gregorianDateUTC.set(Calendar.SECOND, 0);
-
-		// Get the julian date for this Gregorian date at midnight.
-		// final double julianDate2 = getJulianDate(gregorianDateUTC);
-
-		// Compare the julian date at noon and the real julian date. Add the
-		// difference (fraction of a day) to the gregorian date.
+		// Apply the fraction of the day in the Julian date to the Gregorian
+		// date.
 		// Example: dayFraction = 0.717
-		final double dayFraction = (julianDate + 0.5) - J;/* day - ((int) day); */
-		/*
-		 * julianDate - julianDate2;
-		 */
+		final double dayFraction = (julianDate + 0.5) - J;
+
 		// Ex: 0.717*24 = 17.208 hours. We truncate to 17 hours.
 		final int hours = (int) (dayFraction * 24);
 		// Ex: 17.208 - 17 = 0.208 days. 0.208*60 = 12.48 minutes. We truncate
@@ -140,14 +126,19 @@ public class SunriseSunset {
 		final int minutes = (int) ((dayFraction * 24 - hours) * 60d);
 		// Ex: 17.208*60 - (17*60 + 12) = 1032.48 - 1032 = 0.48 minutes. 0.48*60
 		// = 28.8 seconds.
-		// We truncate to 28 seconds.
-		final int seconds = (int) ((dayFraction * 24 * 3600 - (hours * 3600 + minutes * 60)) + .5 /*
-																								 * double
-																								 * rounding
-																								 */);
+		// We round to 29 seconds.
+		final int seconds = (int) ((dayFraction * 24 * 3600 - (hours * 3600 + minutes * 60)) + .5);
+
+		// Create the gregorian date in UTC.
+		final Calendar gregorianDateUTC = Calendar.getInstance(TimeZone
+				.getTimeZone("UTC"));
+		gregorianDateUTC.set(Calendar.YEAR, year);
+		gregorianDateUTC.set(Calendar.MONTH, month);
+		gregorianDateUTC.set(Calendar.DAY_OF_MONTH, day);
 		gregorianDateUTC.set(Calendar.HOUR_OF_DAY, hours);
 		gregorianDateUTC.set(Calendar.MINUTE, minutes);
 		gregorianDateUTC.set(Calendar.SECOND, seconds);
+
 		// Convert to a Gregorian date in the local timezone.
 		Calendar gregorianDate = Calendar.getInstance();
 		gregorianDate.setTimeInMillis(gregorianDateUTC.getTimeInMillis());
@@ -170,19 +161,12 @@ public class SunriseSunset {
 	 */
 	public static Calendar[] getSunriseSunset(final Calendar day,
 			final double latitude, double longitude) {
-		// Set the day to noon
-		Calendar dayAtNoon = (Calendar) day.clone();
-		/*
-		 * dayAtNoon.set(Calendar.HOUR_OF_DAY, 12);
-		 * dayAtNoon.set(Calendar.MINUTE, 0); dayAtNoon.set(Calendar.SECOND, 0);
-		 * dayAtNoon.set(Calendar.MILLISECOND, 0);
-		 */
 		final double latitudeRad = Math.toRadians(latitude);
 
 		longitude = -longitude;
 
 		// Get the given date as a Julian date.
-		final double julianDate = getJulianDate(dayAtNoon);
+		final double julianDate = getJulianDate(day);
 
 		// Calculate current Julian cycle (number of days since 2000-01-01).
 		final double nstar = julianDate - JULIAN_DATE_2000_01_01 - CONST_0009
@@ -239,51 +223,23 @@ public class SunriseSunset {
 	}
 
 	/**
-	 * Test the main SunriseSunset method.
-	 * 
-	 * @param args
-	 *            : date in the format yyyyMMdd, latitude in degrees, longitude
-	 *            in degrees, the timeZone to display the result
-	 * @throws ParseException
+	 * @param latitude
+	 * @param longitude
+	 * @return true if it is currently day at the given location. This returns
+	 *         true if the current time at the location is after the sunrise and
+	 *         before the sunset for that location.
 	 */
-	public static void main(final String args[]) throws ParseException {
-		if (args.length != 4) {
-			System.err
-					.println("Usage: "
-							+ SunriseSunset.class.getName()
-							+ " <date in yyyyMMdd> <latitude in degrees> <longitude in degrees (Est=positive)> <Java timezone>");
-			System.err.println("Ex: " + SunriseSunset.class.getName()
-					+ " 20090602 34 118 America/Los_Angeles");
-			System.exit(-1);
-		}
-		final String dateformat = "yyyyMMdd";
-		final SimpleDateFormat sdf = new SimpleDateFormat(dateformat);
-		int idx = 0;
-		final Date date = sdf.parse(args[idx++]);
-		final Calendar cal = Calendar.getInstance();
-		cal.setTime(date);
-		final double latitude = Double.parseDouble(args[idx++]);
-		final double longitude = Double.parseDouble(args[idx++]);
-		final TimeZone timeZone = TimeZone.getTimeZone(args[idx++]);
-		final SimpleDateFormat sdfResult = new SimpleDateFormat(
-				"yyyy-MM-dd HH:mm z");
-		sdfResult.setTimeZone(timeZone);
-		final Calendar[] sunriseSunset = SunriseSunset.getSunriseSunset(cal,
-				latitude, longitude);
-		System.out.println("On " + sdf.format(date) + " at (" + latitude + ","
-				+ longitude + ", " + timeZone.getDisplayName()
-				+ "), the sun will be up from "
-				+ sdfResult.format(sunriseSunset[0].getTime()) + " to "
-				+ sdfResult.format(sunriseSunset[1].getTime()));
-		boolean isDay = isDay(latitude, longitude);
-		System.out.println("Currently " + (isDay ? "day" : "night"));
-
-	}
-
 	public static boolean isDay(double latitude, double longitude) {
 		return !isNight(latitude, longitude);
 	}
 
+	/**
+	 * @param latitude
+	 * @param longitude
+	 * @return true if it is currently night at the given location. This returns
+	 *         true if the current time at the location is after the sunset and
+	 *         before the sunrise for that location.
+	 */
 	public static boolean isNight(double latitude, double longitude) {
 		Calendar today = Calendar.getInstance();
 		Calendar[] sunriseSunset = getSunriseSunset(today, latitude, longitude);
@@ -292,4 +248,5 @@ public class SunriseSunset {
 		Calendar now = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		return now.before(sunrise) || now.after(sunset);
 	}
+
 }
