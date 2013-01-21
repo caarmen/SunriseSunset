@@ -175,10 +175,11 @@ public class SunriseSunset {
 				+ " longitude=" + longitude);
 		// Set the day to noon
 		Calendar dayAtNoon = (Calendar) day.clone();
-		dayAtNoon.set(Calendar.HOUR_OF_DAY, 12);
-		dayAtNoon.set(Calendar.MINUTE, 0);
-		dayAtNoon.set(Calendar.SECOND, 0);
-		dayAtNoon.set(Calendar.MILLISECOND, 0);
+		/*
+		 * dayAtNoon.set(Calendar.HOUR_OF_DAY, 12);
+		 * dayAtNoon.set(Calendar.MINUTE, 0); dayAtNoon.set(Calendar.SECOND, 0);
+		 * dayAtNoon.set(Calendar.MILLISECOND, 0);
+		 */
 		final double latitudeRad = Math.toRadians(latitude);
 
 		longitude = -longitude;
@@ -280,21 +281,18 @@ public class SunriseSunset {
 				+ "), the sun will be up from "
 				+ sdfResult.format(sunriseSunset[0].getTime()) + " to "
 				+ sdfResult.format(sunriseSunset[1].getTime()));
+		boolean isDay = isDay(latitude, longitude);
+		System.out.println("Currently " + (isDay ? "day" : "night"));
 
 	}
 
-	public static boolean isNight(String coordinates) {
-		if (coordinates == null)
-			return false;
-		String[] coordStr = coordinates.split(",");
-		double lat = Double.valueOf(coordStr[0]);
-		double lon = Double.valueOf(coordStr[1]);
+	public static boolean isDay(double latitude, double longitude) {
+		return !isNight(latitude, longitude);
+	}
+
+	public static boolean isNight(double latitude, double longitude) {
 		Calendar today = Calendar.getInstance();
-		// today.set(Calendar.HOUR_OF_DAY, 0);
-		// today.set(Calendar.MINUTE, 0);
-		// today.set(Calendar.SECOND, 0);
-		// today.set(Calendar.MILLISECOND, 0);
-		Calendar[] sunriseSunset = getSunriseSunset(today, lat, lon);
+		Calendar[] sunriseSunset = getSunriseSunset(today, latitude, longitude);
 		Calendar sunrise = sunriseSunset[0];
 		Calendar sunset = sunriseSunset[1];
 		Calendar now = Calendar.getInstance(TimeZone.getTimeZone("UTC"));

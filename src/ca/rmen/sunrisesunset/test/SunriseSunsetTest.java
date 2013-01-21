@@ -114,6 +114,7 @@ public class SunriseSunsetTest {
 		TimeZone tz = TimeZone.getTimeZone(timeZoneString);
 
 		Calendar inputDay = parseDate(tz, DATE_FORMAT_DAY, inputDayString);
+		inputDay.set(Calendar.HOUR_OF_DAY, 12);
 		Calendar[] actualSunriseSunset = SunriseSunset.getSunriseSunset(
 				inputDay, inputLatitude, inputLongitude);
 		Calendar expectedSunrise = parseDate(tz, DATE_FORMAT_MINUTES,
