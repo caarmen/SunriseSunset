@@ -110,7 +110,7 @@ public class SunriseSunset {
 		int g = j / DAYS_PER_4000_YEARS;
 		int dg = j % DAYS_PER_4000_YEARS;
 
-		// let c = (dg div 36524 + 1) × 3 div 4; let dc = dg - c × 36524;
+		// let c = (dg div 36524 + 1) * 3 div 4; let dc = dg - c * 36524;
 		int c = ((dg / DAYS_PER_CENTURY + 1) * 3) / 4;
 		int dc = dg - c * DAYS_PER_CENTURY;
 
@@ -118,19 +118,19 @@ public class SunriseSunset {
 		int b = dc / DAYS_PER_4_YEARS;
 		int db = dc % DAYS_PER_4_YEARS;
 
-		// let a = (db div 365 + 1) × 3 div 4; let da = db - a × 365;
+		// let a = (db div 365 + 1) * 3 div 4; let da = db - a * 365;
 		int a = ((db / 365 + 1) * 3) / 4;
 		int da = db - a * 365;
 
-		// let y = g × 400 + c × 100 + b × 4 + a; (note: this is the integer
+		// let y = g * 400 + c * 100 + b * 4 + a; (note: this is the integer
 		// number of full years elapsed since March 1, 4801 BC at 00:00 UTC);
 		int y = g * 400 + c * 100 + b * 4 + a;
 
-		// let m = (da × 5 + 308) div 153 - 2; (note: this is the integer number
+		// let m = (da * 5 + 308) div 153 - 2; (note: this is the integer number
 		// of full months elapsed since the last March 1 at 00:00 UTC);
 		int m = (da * 5 + 308) / DAYS_PER_5_MONTHS - 2;
 
-		// let d = da -(m + 4) × 153 div 5 + 122; (note: this is the number of
+		// let d = da -(m + 4) * 153 div 5 + 122; (note: this is the number of
 		// days elapsed since day 1 of the month at 00:00 UTC, including
 		// fractions of one day);
 		int d = da - ((m + 4) * DAYS_PER_5_MONTHS) / 5 + 122;
