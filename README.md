@@ -1,7 +1,7 @@
 SunriseSunset
 =============
 
-Provides methods to determine the sunrise and sunset time of a given
+Java utility which provides methods to determine the sunrise and sunset time of a given
 location, or if it is currently day or night at a given location.
 
 Also provides methods to convert between Greogrian and Julian dates.
