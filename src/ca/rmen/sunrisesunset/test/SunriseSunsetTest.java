@@ -278,24 +278,116 @@ public class SunriseSunsetTest {
 	}
 
 	/**
-	 * Log the day/night status of some locations. This method only logs the
-	 * day/night status, it does not do any validation.
+	 * Tests the {@link SunriseSunset#isDay(double, double)} method for a few
+	 * locations. The value of isDay will depend on when the test is executed
+	 * (time of day and time of year). We approximately validate the result: If
+	 * the method returns true (day), we compare the current time to the
+	 * sunrise/sunset of the longest day. If the method returns false (night),
+	 * we compare the current time to the sunrise/sunset of the longest night.
 	 */
 	@Test
-	public void testIsNight() {
-		logDayOrNight("Honolulu", 21.3069, -157.8583);
-		logDayOrNight("Los Angeles", 34.0522, -118.2437);
-		logDayOrNight("Chicago", 41.8781, -87.6298);
-		logDayOrNight("Dublin", 53.3441, -6.2675);
-		logDayOrNight("Paris", 48.8567, 2.351);
-		logDayOrNight("Tokyo", 35.6938, 139.7036);
-		logDayOrNight("Sydney", -33.86, 151.2111);
+	public void testDayOrNight() {
+		testDayOrNight("Honolulu", "Pacific/Honolulu", 21.3069, -157.8583,
+				"5:48", "7:13", "17:47", "19:19");
+		testDayOrNight("Los Angeles", "PST", 34.0522, -118.2437, "5:40",
+				"7:00", "16:42", "20:09");
+		testDayOrNight("Chicago", "CST", 41.8781, -87.6298, "5:14", "7:19",
+				"16:19", "22:31");
+		testDayOrNight("Dublin", "Europe/Dublin", 53.3441, -6.2675, "4:55",
+				"8:42", "16:05", "21:58");
+		testDayOrNight("Paris", "CET", 48.8567, 2.351, "5:45", "8:45", "16:53",
+				"21:59");
+		testDayOrNight("Tokyo", "Japan", 35.6938, 139.7036, "4:24", "6:52",
+				"16:27", "7:02");
+		testDayOrNight("Sydney", "Australia/Sydney", -33.86, 151.2111, "5:36",
+				"7:02", "16:52", "20:10");
 
 	}
 
-	private void logDayOrNight(String name, double latitude, double longitude) {
-		boolean isDay = SunriseSunset.isDay(latitude, longitude);
+	/**
+	 * Test the day/night status of a location. Since the day/night status of a
+	 * location depends on when the unit test is executed, we can only do an
+	 * approximate validation. For a given location, we know the earliest and
+	 * latest possible times for sunrise and sunset. If the
+	 * {@link SunriseSunset#isDay(double, double)} method returns true, we
+	 * compare "now" with the longest day (earliest sunrise/latest sunset) at
+	 * that location and make sure that "now" falls into this range. If isDay
+	 * returns false, we compare "now" with the longest night (latest
+	 * sunrise/earliest sunset) at that location and make sure that "now" is
+	 * either before that sunrise or after that sunset.
+	 * 
+	 * @param name
+	 *            the name of the location. Used for logging and shown in the
+	 *            error if an assertion fails.
+	 * @param timeZoneString
+	 *            a valid Java timezone
+	 * @param inputLatitude
+	 *            the latitude of a given location
+	 * @param inputLongitude
+	 *            the longitude of a given location (West is negative).
+	 * @param earliestSunriseString
+	 *            a time in the format HH:mm for the earliest time sunrise
+	 *            occurs throughout the year, at this location.
+	 * @param latestSunriseString
+	 *            a time in the format HH:mm for the latest time sunrise occurs
+	 *            throughout the year, at this location.
+	 * @param earliestSunsetString
+	 *            a time in the format HH:mm for the latest time sunset occurs
+	 *            throughout the year, at this location.
+	 * @param latestSunsetString
+	 *            a time in the format HH:mm for the latest time sunset occurs
+	 *            throughout the year, at this location.
+	 */
+	private void testDayOrNight(String name, String timeZoneString,
+			double inputLatitude, double inputLongitude,
+			String earliestSunriseString, String latestSunriseString,
+			String earliestSunsetString, String latestSunsetString) {
+		boolean isDay = SunriseSunset.isDay(inputLatitude, inputLongitude);
 		System.out.println(name + ": Currently " + (isDay ? "day" : "night"));
+
+		Calendar now = Calendar.getInstance(TimeZone
+				.getTimeZone(timeZoneString));
+		Calendar earliestSunrise = getCalendarAtTime(now, earliestSunriseString);
+		Calendar latestSunrise = getCalendarAtTime(now, latestSunriseString);
+		Calendar earliestSunset = getCalendarAtTime(now, earliestSunsetString);
+		Calendar latestSunset = getCalendarAtTime(now, latestSunsetString);
+		String nowString = format(DATE_FORMAT_MINUTES, now);
+		if (isDay) {
+			Assert.assertTrue("In " + name + ", " + nowString
+					+ " is before sunrise at " + earliestSunriseString
+					+ ", but we think it's day.", now.after(earliestSunrise));
+			Assert.assertTrue("In " + name + ", " + nowString
+					+ " is after sunset at " + latestSunsetString
+					+ ", but we think it's day.", now.before(latestSunset));
+		} else {
+			Assert.assertTrue("In " + name + ", " + nowString
+					+ " is after sunrise at " + latestSunriseString
+					+ " or before sunset at " + earliestSunsetString
+					+ ", but we think it's night.", now.before(latestSunrise)
+					|| now.after(earliestSunset));
+		}
+	}
+
+	/**
+	 * @param day
+	 *            a date in any timezone.
+	 * @param timeString
+	 *            a time in format HH:mm
+	 * @return a new Calendar object with the same day as the given day, and the
+	 *         hours and minutes in timeString. Seconds and milliseconds are set
+	 *         to zero.
+	 */
+	private Calendar getCalendarAtTime(Calendar day, String timeString) {
+
+		String[] tokens = timeString.split(":");
+		int hour = Integer.parseInt(tokens[0]);
+		int min = Integer.parseInt(tokens[1]);
+		Calendar clone = (Calendar) day.clone();
+		clone.set(Calendar.HOUR_OF_DAY, hour);
+		clone.set(Calendar.MINUTE, min);
+		clone.set(Calendar.SECOND, 0);
+		clone.set(Calendar.MILLISECOND, 0);
+		return clone;
 	}
 
 }
