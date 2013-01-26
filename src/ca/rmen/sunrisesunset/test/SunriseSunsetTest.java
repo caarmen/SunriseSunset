@@ -20,6 +20,7 @@ package ca.rmen.sunrisesunset.test;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -46,6 +47,19 @@ public class SunriseSunsetTest {
 			"yyyyMMdd");
 
 	/**
+	 * Not a unit test, but helpful for troubleshooting and adding new unit
+	 * tests. This method logs the list of Java timezone ids.
+	 */
+	@Test
+	public void logTimezoneIds() {
+		String[] timezoneIds = TimeZone.getAvailableIDs();
+		Arrays.sort(timezoneIds);
+		for (String timezoneId : timezoneIds)
+			System.out.println(timezoneId);
+
+	}
+
+	/**
 	 * Test conversion between Gregorian and Julian dates (both ways).
 	 */
 	@Test
@@ -55,7 +69,26 @@ public class SunriseSunsetTest {
 		testDateConversion("19780427 12:00:42 CET", 2443625.9588194);
 		testDateConversion("19010101 23:59:59 UTC", 2415386.4999884);
 		testDateConversion("19010101 09:00:00 UTC", 2415385.875);
-		testDateConversion("19010101 00:00:00 AKST", 2415385.875);
+		testDateConversion("19190101 00:00:00 AKST", 2421959.916667);
+		// After WWII, AKST was officially (not in practice) two hours slower
+		// than PST (GMT-10). In practice Alaska had 4 time zones:
+		// Bering Time, Alaska Time, Yukon Time, and Pacific Time.
+		// http://www.alaskahistoricalsociety.org/index.cfm/discover-alaska/Glimpses-of-the-Past/98
+		testDateConversion("19460101 00:00:00 AKST", 2431821.916667);
+		testDateConversion("19670101 00:00:00 AKST", 2439491.916667);
+		testDateConversion("19680101 00:00:00 AKST", 2439856.916667);
+		// After April 1968, Alaska had the four official time zones
+		// with AKST being UTC-10.
+		testDateConversion("19690101 00:00:00 AKST", 2440222.916667);
+		testDateConversion("19830101 00:00:00 AKST", 2445335.916667);
+
+		// In October 1983, Alaska aligned with Yukon time (UTC-9)
+		testDateConversion("19840101 00:00:00 AKST", 2445700.875);
+		testDateConversion("19850101 00:00:00 AKST", 2446066.875);
+		testDateConversion("19900101 00:00:00 AKST", 2447892.875);
+		testDateConversion("20000101 00:00:00 AKST", 2451544.875);
+		testDateConversion("20130101 00:00:00 AKST", 2456293.875);
+
 		testDateConversion("19010101 00:00:00 UTC", 2415385.5);
 		testDateConversion("19001231 23:59:59 UTC", 2415385.4999884);
 		testDateConversion("19000701 00:00:00 UTC", 2415201.5);
@@ -172,6 +205,20 @@ public class SunriseSunsetTest {
 				"20:29");
 		testSunriseSunset("Pacific/Honolulu", "20150827", 21.3069, -157.8583,
 				"06:13", "18:53");
+		testSunriseSunset("America/Argentina/Buenos_Aires", "20130501",
+				-34.6092, -58.3732, "07:29", "18:12");
+		testSunriseSunset("America/Argentina/Buenos_Aires", "20131019",
+				-34.6092, -58.3732, "06:07", "19:11");
+
+		// The following test will not work on Java versions older than 2009.
+		testSunriseSunset("America/Argentina/Buenos_Aires", "20130126",
+				-34.6092, -58.3732, "06:07", "20:04");
+		// The following test will not work on Java versions older than 2009.
+		testSunriseSunset("America/Argentina/Buenos_Aires", "20131020",
+				-34.6092, -58.3732, "06:05", "19:11");
+		// The following test will not work on Java versions older than 2009.
+		testSunriseSunset("America/Argentina/Buenos_Aires", "20131031",
+				-34.6092, -58.3732, "05:53", "19:21");
 	}
 
 	/**
@@ -292,13 +339,15 @@ public class SunriseSunsetTest {
 		testDayOrNight("Los Angeles", "PST", 34.0522, -118.2437, "5:40",
 				"7:00", "16:42", "20:09");
 		testDayOrNight("Chicago", "CST", 41.8781, -87.6298, "5:14", "7:19",
-				"16:19", "22:31");
+				"16:19", "20:31");
+		testDayOrNight("Buenos Aires", "America/Argentina/Buenos_Aires",
+				-34.6092, -58.3732, "5:32", "8:02", "17:48", "20:11");
 		testDayOrNight("Dublin", "Europe/Dublin", 53.3441, -6.2675, "4:55",
 				"8:42", "16:05", "21:58");
 		testDayOrNight("Paris", "CET", 48.8567, 2.351, "5:45", "8:45", "16:53",
 				"21:59");
 		testDayOrNight("Tokyo", "Japan", 35.6938, 139.7036, "4:24", "6:52",
-				"16:27", "7:02");
+				"16:27", "19:02");
 		testDayOrNight("Sydney", "Australia/Sydney", -33.86, 151.2111, "5:36",
 				"7:02", "16:52", "20:10");
 
