@@ -271,8 +271,8 @@ public class SunriseSunset {
 	 * @param longitude
 	 *            the longitude of the location in degrees (West is negative)
 	 * @return true if it is currently night at the given location. This returns
-	 *         true if the current time at the location is after the sunset or
-	 *         before the sunrise for that location.
+	 *         true if the current time at the location is before the sunrise or
+	 *         after the sunset for that location.
 	 */
 	public static boolean isNight(double latitude, double longitude) {
 		Calendar today = Calendar.getInstance();
