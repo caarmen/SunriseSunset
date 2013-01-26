@@ -24,11 +24,11 @@ import java.util.TimeZone;
 /**
  * Provides methods to determine the sunrise and sunset time of a given
  * location, or if it is currently day or night at a given location. <br/>
- * Also provides methods to convert between Greogrian and Julian dates.<br/>
+ * Also provides methods to convert between Gregorian and Julian dates.<br/>
  * The formulas used by this class are from the Wikipedia articles on Julian Day
  * and Sunrise Equation. <br/>
- * {@link http://en.wikipedia.org/wiki/Julian_day} <br/>
- * {@link http://en.wikipedia.org/wiki/Sunrise_equation}
+ * {@link "http://en.wikipedia.org/wiki/Julian_day"} <br/>
+ * {@link "http://en.wikipedia.org/wiki/Sunrise_equation"}
  * 
  * @author Carmen Alvarez
  * 
@@ -45,15 +45,14 @@ public class SunriseSunset {
 	 * 
 	 * This is based on the Wikipedia article for Julian day.
 	 * 
-	 * {@link http://en.wikipedia.org/wiki/Julian_day#
-	 * Converting_Julian_or_Gregorian_calendar_date_to_Julian_Day_Number}
+	 * {@link "http://en.wikipedia.org/wiki/Julian_day#Converting_Julian_or_Gregorian_calendar_date_to_Julian_Day_Number"}
 	 * 
 	 * @param gregorianDate
 	 *            Gregorian date in any time zone.
 	 * @return the Julian date for the given Gregorian date.
 	 */
 	public static double getJulianDate(final Calendar gregorianDate) {
-		// Convert the date to the UTC timezone.
+		// Convert the date to the UTC time zone.
 		TimeZone tzUTC = TimeZone.getTimeZone("UTC");
 		Calendar gregorianDateUTC = Calendar.getInstance(tzUTC);
 		gregorianDateUTC.setTimeInMillis(gregorianDate.getTimeInMillis());
@@ -81,14 +80,13 @@ public class SunriseSunset {
 
 	/**
 	 * Convert a Julian date to a Gregorian date. The Gregorian date will be in
-	 * the local timezone. Accuracy is to the second.
+	 * the local time zone. Accuracy is to the second.
 	 * 
 	 * This is based on the Wikipedia article for Julian day.
 	 * 
-	 * {@link http://en.wikipedia.org/wiki/Julian_day#
-	 * Gregorian_calendar_from_Julian_day_number}
+	 * {@link "http://en.wikipedia.org/wiki/Julian_day#Gregorian_calendar_from_Julian_day_number"}
 	 * 
-	 * @return a Gregorian date in the local timezone.
+	 * @return a Gregorian date in the local time zone.
 	 */
 	public static Calendar getGregorianDate(final double julianDate) {
 
@@ -169,7 +167,7 @@ public class SunriseSunset {
 		gregorianDateUTC.set(Calendar.MINUTE, minutes);
 		gregorianDateUTC.set(Calendar.SECOND, seconds);
 
-		// Convert to a Gregorian date in the local timezone.
+		// Convert to a Gregorian date in the local time zone.
 		Calendar gregorianDate = Calendar.getInstance();
 		gregorianDate.setTimeInMillis(gregorianDateUTC.getTimeInMillis());
 		return gregorianDate;
@@ -178,7 +176,7 @@ public class SunriseSunset {
 	/**
 	 * Calculate the sunrise and sunset times for the given date and given
 	 * location. This is based on the Wikipedia article on the Sunrise equation:
-	 * {@link http://en.wikipedia.org/wiki/Sunrise_equation}
+	 * {@link "http://en.wikipedia.org/wiki/Sunrise_equation"}
 	 * 
 	 * @param day
 	 *            The day for which to calculate sunrise and sunset
