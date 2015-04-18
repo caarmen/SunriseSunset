@@ -222,6 +222,131 @@ public class SunriseSunsetTest {
 	}
 
 	/**
+	 * Test the time of civl twilight some locations.
+	 */
+	@Test
+	public void testCivilTwilight() {
+
+		testCivilTwilight("PST", "20130120", 34.0522, -118.2437, "06:30",
+				"17:38");
+		testCivilTwilight("CET", "20130120", 48.8567, 2.351, "08:00", "18:04");
+		testCivilTwilight("Australia/Sydney", "20121225", -33.86, 151.2111,
+				"05:14", "20:38");
+		testCivilTwilight("Japan", "20130501", 35.6938, 139.7036, "04:22",
+				"18:55");
+		testCivilTwilight("Europe/Dublin", "20130605", 53.3441, -6.2675,
+				"04:10", "22:37");
+		testCivilTwilight("CST", "20130622", 41.8781, -87.6298, "04:41",
+				"21:04");
+		testCivilTwilight("Pacific/Honolulu", "20150827", 21.3069, -157.8583,
+				"05:51", "19:16");
+		testCivilTwilight("America/Argentina/Buenos_Aires", "20130501",
+				-34.6092, -58.3732, "07:03", "18:38");
+		testCivilTwilight("America/Argentina/Buenos_Aires", "20131019",
+				-34.6092, -58.3732, "05:41", "19:36");
+
+		// The following test will not work on Java versions older than 2009.
+		testCivilTwilight("America/Argentina/Buenos_Aires", "20130126",
+				-34.6092, -58.3732, "05:40", "20:32");
+		// The following test will not work on Java versions older than 2009.
+		testCivilTwilight("America/Argentina/Buenos_Aires", "20131020",
+				-34.6092, -58.3732, "05:39", "19:37");
+		// The following test will not work on Java versions older than 2009.
+		testCivilTwilight("America/Argentina/Buenos_Aires", "20131031",
+				-34.6092, -58.3732, "05:26", "19:48");
+	}
+
+	/**
+	 * @param timeZoneString
+	 *            a valid Java timezone
+	 * @param inputDayString
+	 *            a day in the format {@link #DATE_FORMAT_DAY}
+	 * @param inputLatitude
+	 *            the latitude of a given location
+	 * @param inputLongitude
+	 *            the longitude of a given location (West is negative).
+	 * @param expectedTwilightEndString
+	 *            the time the twilight is expected to end, in the format HH:mm. The
+	 *            time should be in the timezone of the parameter
+	 *            timeZoneString.
+	 * @param expectedTwilightBeginString
+	 *            the time the twilight is expected to begin, in the format HH:mm. The time
+	 *            should be in the timezone of the parameter timeZoneString.
+	 */
+	private void testCivilTwilight(String timeZoneString,
+								   String inputDayString, double inputLatitude, double inputLongitude,
+								   String expectedTwilightEndString, String expectedTwilightBeginString) {
+		Calendar inputDay = parseDate(timeZoneString, inputDayString);
+
+		// Calculate the actual sunrise and sunset times.
+		Calendar[] actualSunriseSunset = SunriseSunset.getCivilTwilight(
+				inputDay, inputLatitude, inputLongitude);
+
+		// Compare the calculated times with the expected ones.
+		validateSunriseSunset(actualSunriseSunset, timeZoneString, inputDayString, expectedTwilightEndString, expectedTwilightBeginString);
+	}
+
+	/**
+	 * @param timeZoneString
+	 *            a valid Java timezone
+	 * @param inputDayString
+	 *            a day in the format {@link #DATE_FORMAT_DAY}
+	 * @param inputLatitude
+	 *            the latitude of a given location
+	 * @param inputLongitude
+	 *            the longitude of a given location (West is negative).
+	 * @param expectedTwilightEndString
+	 *            the time the twilight is expected to end, in the format HH:mm. The
+	 *            time should be in the timezone of the parameter
+	 *            timeZoneString.
+	 * @param expectedTwilightBeginString
+	 *            the time the twilight is expected to begin, in the format HH:mm. The time
+	 *            should be in the timezone of the parameter timeZoneString.
+	 */
+	private void testNauticalTwilight(String timeZoneString,
+								   String inputDayString, double inputLatitude, double inputLongitude,
+								   String expectedTwilightEndString, String expectedTwilightBeginString) {
+		Calendar inputDay = parseDate(timeZoneString, inputDayString);
+
+		// Calculate the actual sunrise and sunset times.
+		Calendar[] actualSunriseSunset = SunriseSunset.getNauticalTwilight(
+				inputDay, inputLatitude, inputLongitude);
+
+		// Compare the calculated times with the expected ones.
+		validateSunriseSunset(actualSunriseSunset, timeZoneString, inputDayString, expectedTwilightEndString, expectedTwilightBeginString);
+	}
+
+	/**
+	 * @param timeZoneString
+	 *            a valid Java timezone
+	 * @param inputDayString
+	 *            a day in the format {@link #DATE_FORMAT_DAY}
+	 * @param inputLatitude
+	 *            the latitude of a given location
+	 * @param inputLongitude
+	 *            the longitude of a given location (West is negative).
+	 * @param expectedTwilightEndString
+	 *            the time the twilight is expected to end, in the format HH:mm. The
+	 *            time should be in the timezone of the parameter
+	 *            timeZoneString.
+	 * @param expectedTwilightBeginString
+	 *            the time the twilight is expected to begin, in the format HH:mm. The time
+	 *            should be in the timezone of the parameter timeZoneString.
+	 */
+	private void testAstronomicalTwilight(String timeZoneString,
+									  String inputDayString, double inputLatitude, double inputLongitude,
+									  String expectedTwilightEndString, String expectedTwilightBeginString) {
+		Calendar inputDay = parseDate(timeZoneString, inputDayString);
+
+		// Calculate the actual sunrise and sunset times.
+		Calendar[] actualSunriseSunset = SunriseSunset.getAstronomicalTwilight(
+				inputDay, inputLatitude, inputLongitude);
+
+		// Compare the calculated times with the expected ones.
+		validateSunriseSunset(actualSunriseSunset, timeZoneString, inputDayString, expectedTwilightEndString, expectedTwilightBeginString);
+	}
+
+	/**
 	 * @param timeZoneString
 	 *            a valid Java timezone
 	 * @param inputDayString
@@ -241,24 +366,39 @@ public class SunriseSunsetTest {
 	private void testSunriseSunset(String timeZoneString,
 			String inputDayString, double inputLatitude, double inputLongitude,
 			String expectedSunriseString, String expectedSunsetString) {
+		Calendar inputDay = parseDate(timeZoneString, inputDayString);
+
+		// Calculate the actual sunrise and sunset times.
+		Calendar[] actualSunriseSunset = SunriseSunset.getSunriseSunset(
+				inputDay, inputLatitude, inputLongitude);
+
+		// Compare the calculated times with the expected ones.
+		validateSunriseSunset(actualSunriseSunset, timeZoneString, inputDayString, expectedSunriseString, expectedSunsetString);
+	}
+
+	private Calendar parseDate(String timeZoneString, String inputDayString) {
 		TimeZone tz = TimeZone.getTimeZone(timeZoneString);
-		Calendar expectedSunrise = parseDate(tz, DATE_FORMAT_MINUTES,
-				inputDayString + " " + expectedSunriseString);
-		Calendar expectedSunset = parseDate(tz, DATE_FORMAT_MINUTES,
-				inputDayString + " " + expectedSunsetString);
 
 		// Create a Calendar for noon, in the given timezone for the given day.
 		Calendar inputDay = parseDate(tz, DATE_FORMAT_DAY, inputDayString);
 		inputDay.set(Calendar.HOUR_OF_DAY, 12);
 
-		// Calculate the actual sunrise and sunset times.
-		Calendar[] actualSunriseSunset = SunriseSunset.getSunriseSunset(
-				inputDay, inputLatitude, inputLongitude);
+		return inputDay;
+	}
+
+	private void validateSunriseSunset(Calendar[] actualSunriseSunset, String timeZoneString, String inputDayString,
+									   String expectedSunriseString, String expectedSunsetString) {
 		Calendar actualSunrise = actualSunriseSunset[0];
 		Calendar actualSunset = actualSunriseSunset[1];
 
 		String actualSunriseString = format(DATE_FORMAT_MINUTES, actualSunrise);
 		String actualSunsetString = format(DATE_FORMAT_MINUTES, actualSunset);
+
+		TimeZone tz = TimeZone.getTimeZone(timeZoneString);
+		Calendar expectedSunrise = parseDate(tz, DATE_FORMAT_MINUTES,
+				inputDayString + " " + expectedSunriseString);
+		Calendar expectedSunset = parseDate(tz, DATE_FORMAT_MINUTES,
+				inputDayString + " " + expectedSunsetString);
 
 		// Compare the actual and expected sunrise/sunset times. Allow a margin
 		// of error of 3 minutes.
@@ -266,6 +406,7 @@ public class SunriseSunsetTest {
 				actualSunrise, actualSunriseString, 180000);
 		assertEqualsOrAlmostEquals(expectedSunset, expectedSunsetString,
 				actualSunset, actualSunsetString, 180000);
+
 	}
 
 	private Calendar parseDate(TimeZone tz, SimpleDateFormat format,

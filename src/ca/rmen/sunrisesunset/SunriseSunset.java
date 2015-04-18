@@ -174,10 +174,61 @@ public class SunriseSunset {
 	}
 
 	/**
+	 * Calculate the civil twilight time for the given date and given location.
+	 * @param day
+	 *            The day for which to calculate civil twilight
+	 * @param latitude
+	 *            the latitude of the location in degrees.
+	 * @param longitude
+	 *            the longitude of the location in degrees (West is negative)
+	 * @return a two-element Gregorian Calendar array. The first element is the
+	 *         end of civil twilight, the second element is the beginning of civil
+	 *         twilight.
+	 */
+	public static Calendar[] getCivilTwilight(final Calendar day,
+											  final double latitude, double longitude) {
+		return getSunriseSunset(day, latitude, longitude, -6.0);
+	}
+
+	/**
+	 * Calculate the nautical twilight time for the given date and given location.
+	 * @param day
+	 *            The day for which to calculate nautical twilight
+	 * @param latitude
+	 *            the latitude of the location in degrees.
+	 * @param longitude
+	 *            the longitude of the location in degrees (West is negative)
+	 * @return a two-element Gregorian Calendar array. The first element is the
+	 *         end of nautical twilight, the second element is the beginning of
+	 *         nautical twilight.
+	 */
+	public static Calendar[] getNauticalTwilight(final Calendar day,
+											  final double latitude, double longitude) {
+		return getSunriseSunset(day, latitude, longitude, -12.0);
+	}
+
+	/**
+	 * Calculate the astronomical twilight time for the given date and given location.
+	 * @param day
+	 *            The day for which to calculate astronomical twilight
+	 * @param latitude
+	 *            the latitude of the location in degrees.
+	 * @param longitude
+	 *            the longitude of the location in degrees (West is negative)
+	 * @return a two-element Gregorian Calendar array. The first element is the
+	 *         end of astronomical twilight, the second element is the beginning of
+	 *         astronomical twilight.
+	 */
+	public static Calendar[] getAstronomicalTwilight(final Calendar day,
+												 final double latitude, double longitude) {
+		return getSunriseSunset(day, latitude, longitude, -18.0);
+	}
+
+	/**
 	 * Calculate the sunrise and sunset times for the given date and given
 	 * location. This is based on the Wikipedia article on the Sunrise equation:
 	 * {@link "http://en.wikipedia.org/wiki/Sunrise_equation"}
-	 * 
+	 *
 	 * @param day
 	 *            The day for which to calculate sunrise and sunset
 	 * @param latitude
@@ -188,7 +239,29 @@ public class SunriseSunset {
 	 *         sunrise, the second element is the sunset.
 	 */
 	public static Calendar[] getSunriseSunset(final Calendar day,
-			final double latitude, double longitude) {
+											  final double latitude, double longitude) {
+		return getSunriseSunset(day, latitude, longitude, -0.83);
+	}
+
+	/**
+	 * Calculate the sunrise and sunset times for the given date, given
+	 * location, and sun altitude.
+	 * This is based on the Wikipedia article on the Sunrise equation:
+	 * {@link "http://en.wikipedia.org/wiki/Sunrise_equation"}
+	 * 
+	 * @param day
+	 *            The day for which to calculate sunrise and sunset
+	 * @param latitude
+	 *            the latitude of the location in degrees.
+	 * @param longitude
+	 *            the longitude of the location in degrees (West is negative)
+	 * @param sunAltitude
+	 *            the angle between the horizon and the centre of the sun's disc (http://en.wikipedia.org/wiki/Solar_zenith_angle#Solar_elevation_angle).
+	 * @return a two-element Gregorian Calendar array. The first element is the
+	 *         sunrise, the second element is the sunset.
+	 */
+	public static Calendar[] getSunriseSunset(final Calendar day,
+			final double latitude, double longitude, double sunAltitude) {
 		final double latitudeRad = Math.toRadians(latitude);
 
 		longitude = -longitude;
@@ -223,10 +296,10 @@ public class SunriseSunset {
 
 		// Declination of the sun.
 		final double delta = Math.asin(Math.sin(lambda)
-				* Math.sin(Math.toRadians(23.45)));
+				* Math.sin(Math.toRadians(23.439)));
 
 		// Hour angle
-		final double omega = Math.acos((Math.sin(Math.toRadians(-0.83)) - Math
+		final double omega = Math.acos((Math.sin(Math.toRadians(sunAltitude)) - Math
 				.sin(latitudeRad) * Math.sin(delta))
 				/ (Math.cos(latitudeRad) * Math.cos(delta)));
 
