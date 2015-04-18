@@ -270,7 +270,7 @@ public class SunriseSunsetTest {
 		testNauticalTwilight("Japan", "20130501", 35.6938, 139.7036, "03:49",
 				"19:27");
 		//testNauticalTwilight("Europe/Dublin", "20130605", 53.3441, -6.2675,
-		//		"02:47", "23:59");
+		//		"02:47", "00:00"); // Can't test this right now - twilight starts the next day.
 		testNauticalTwilight("CST", "20130622", 41.8781, -87.6298, "03:57",
 				"21:48");
 		testNauticalTwilight("Pacific/Honolulu", "20150827", 21.3069, -157.8583,
@@ -304,8 +304,8 @@ public class SunriseSunsetTest {
 				"03:59", "21:52");
 		testAstronomicalTwilight("Japan", "20130501", 35.6938, 139.7036, "03:14",
 				"20:02");
-		//testAstronomicalTwilight("Europe/Dublin", "20130605", 53.3441, -6.2675,
-		//		"N/A", "N/A");
+		testAstronomicalTwilight("Europe/Dublin", "20130605", 53.3441, -6.2675,
+				null, null);
 		testAstronomicalTwilight("CST", "20130622", 41.8781, -87.6298, "03:04",
 				"22:41");
 		testAstronomicalTwilight("Pacific/Honolulu", "20150827", 21.3069, -157.8583,
@@ -458,6 +458,12 @@ public class SunriseSunsetTest {
 
 	private void validateSunriseSunset(Calendar[] actualSunriseSunset, String timeZoneString, String inputDayString,
 									   String expectedSunriseString, String expectedSunsetString) {
+
+		if(expectedSunriseString == null || expectedSunsetString == null) {
+			Assert.assertNull(actualSunriseSunset);
+			return;
+		}
+
 		Calendar actualSunrise = actualSunriseSunset[0];
 		Calendar actualSunset = actualSunriseSunset[1];
 

@@ -184,6 +184,7 @@ public class SunriseSunset {
 	 * @return a two-element Gregorian Calendar array. The first element is the
 	 *         end of civil twilight, the second element is the beginning of civil
 	 *         twilight.
+	 *         This will return null if there is no civil twilight. (Ex: no twilight in Antarctica in December)
 	 */
 	public static Calendar[] getCivilTwilight(final Calendar day,
 											  final double latitude, double longitude) {
@@ -201,6 +202,7 @@ public class SunriseSunset {
 	 * @return a two-element Gregorian Calendar array. The first element is the
 	 *         end of nautical twilight, the second element is the beginning of
 	 *         nautical twilight.
+	 *         This will return null if there is no nautical twilight. (Ex: no twilight in Antarctica in December)
 	 */
 	public static Calendar[] getNauticalTwilight(final Calendar day,
 											  final double latitude, double longitude) {
@@ -218,6 +220,7 @@ public class SunriseSunset {
 	 * @return a two-element Gregorian Calendar array. The first element is the
 	 *         end of astronomical twilight, the second element is the beginning of
 	 *         astronomical twilight.
+	 *         This will return null if there is no astronomical twilight. (Ex: no twilight in Antarctica in December)
 	 */
 	public static Calendar[] getAstronomicalTwilight(final Calendar day,
 												 final double latitude, double longitude) {
@@ -236,7 +239,7 @@ public class SunriseSunset {
 	 * @param longitude
 	 *            the longitude of the location in degrees (West is negative)
 	 * @return a two-element Gregorian Calendar array. The first element is the
-	 *         sunrise, the second element is the sunset.
+	 *         sunrise, the second element is the sunset. This will return null if there is no sunrise or sunset. (Ex: no sunrise in Antarctica in June)
 	 */
 	public static Calendar[] getSunriseSunset(final Calendar day,
 											  final double latitude, double longitude) {
@@ -258,7 +261,7 @@ public class SunriseSunset {
 	 * @param sunAltitude
 	 *            the angle between the horizon and the centre of the sun's disc (http://en.wikipedia.org/wiki/Solar_zenith_angle#Solar_elevation_angle).
 	 * @return a two-element Gregorian Calendar array. The first element is the
-	 *         sunrise, the second element is the sunset.
+	 *         sunrise, the second element is the sunset. This will return null if there is no sunrise or sunset. (Ex: no sunrise in Antarctica in June)
 	 */
 	public static Calendar[] getSunriseSunset(final Calendar day,
 			final double latitude, double longitude, double sunAltitude) {
@@ -302,6 +305,10 @@ public class SunriseSunset {
 		final double omega = Math.acos((Math.sin(Math.toRadians(sunAltitude)) - Math
 				.sin(latitudeRad) * Math.sin(delta))
 				/ (Math.cos(latitudeRad) * Math.cos(delta)));
+
+		if(Double.isNaN(omega)) {
+			return null;
+		}
 
 		// Sunset
 		final double jset = JULIAN_DATE_2000_01_01
