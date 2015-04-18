@@ -222,7 +222,7 @@ public class SunriseSunsetTest {
 	}
 
 	/**
-	 * Test the time of civl twilight some locations.
+	 * Test the time of civil twilight for some locations.
 	 */
 	@Test
 	public void testCivilTwilight() {
@@ -254,6 +254,76 @@ public class SunriseSunsetTest {
 		// The following test will not work on Java versions older than 2009.
 		testCivilTwilight("America/Argentina/Buenos_Aires", "20131031",
 				-34.6092, -58.3732, "05:26", "19:48");
+	}
+
+	/**
+	 * Test the time of nautical twilight for some locations.
+	 */
+	@Test
+	public void testNauticalTwilight() {
+
+		testNauticalTwilight("PST", "20130120", 34.0522, -118.2437, "05:59",
+				"18:08");
+		testNauticalTwilight("CET", "20130120", 48.8567, 2.351, "07:21", "18:43");
+		testNauticalTwilight("Australia/Sydney", "20121225", -33.86, 151.2111,
+				"04:38", "21:12");
+		testNauticalTwilight("Japan", "20130501", 35.6938, 139.7036, "03:49",
+				"19:27");
+		//testNauticalTwilight("Europe/Dublin", "20130605", 53.3441, -6.2675,
+		//		"02:47", "23:59");
+		testNauticalTwilight("CST", "20130622", 41.8781, -87.6298, "03:57",
+				"21:48");
+		testNauticalTwilight("Pacific/Honolulu", "20150827", 21.3069, -157.8583,
+				"05:24", "19:42");
+		testNauticalTwilight("America/Argentina/Buenos_Aires", "20130501",
+				-34.6092, -58.3732, "06:33", "19:08");
+		testNauticalTwilight("America/Argentina/Buenos_Aires", "20131019",
+				-34.6092, -58.3732, "05:10", "20:07");
+
+		// The following test will not work on Java versions older than 2009.
+		testNauticalTwilight("America/Argentina/Buenos_Aires", "20130126",
+				-34.6092, -58.3732, "05:06", "21:06");
+		// The following test will not work on Java versions older than 2009.
+		testNauticalTwilight("America/Argentina/Buenos_Aires", "20131020",
+				-34.6092, -58.3732, "05:08", "20:08");
+		// The following test will not work on Java versions older than 2009.
+		testNauticalTwilight("America/Argentina/Buenos_Aires", "20131031",
+				-34.6092, -58.3732, "04:54", "20:20");
+	}
+
+	/**
+	 * Test the time of astronomical twilight for some locations.
+	 */
+	@Test
+	public void testAstronomicalTwilight() {
+
+		testAstronomicalTwilight("PST", "20130120", 34.0522, -118.2437, "05:30",
+				"18:38");
+		testAstronomicalTwilight("CET", "20130120", 48.8567, 2.351, "6:43", "19:20");
+		testAstronomicalTwilight("Australia/Sydney", "20121225", -33.86, 151.2111,
+				"03:59", "21:52");
+		testAstronomicalTwilight("Japan", "20130501", 35.6938, 139.7036, "03:14",
+				"20:02");
+		//testAstronomicalTwilight("Europe/Dublin", "20130605", 53.3441, -6.2675,
+		//		"N/A", "N/A");
+		testAstronomicalTwilight("CST", "20130622", 41.8781, -87.6298, "03:04",
+				"22:41");
+		testAstronomicalTwilight("Pacific/Honolulu", "20150827", 21.3069, -157.8583,
+				"04:57", "20:09");
+		testAstronomicalTwilight("America/Argentina/Buenos_Aires", "20130501",
+				-34.6092, -58.3732, "06:04", "19:38");
+		testAstronomicalTwilight("America/Argentina/Buenos_Aires", "20131019",
+				-34.6092, -58.3732, "04:38", "20:39");
+
+		// The following test will not work on Java versions older than 2009.
+		testAstronomicalTwilight("America/Argentina/Buenos_Aires", "20130126",
+				-34.6092, -58.3732, "4:30", "21:42");
+		// The following test will not work on Java versions older than 2009.
+		testAstronomicalTwilight("America/Argentina/Buenos_Aires", "20131020",
+				-34.6092, -58.3732, "04:36", "20:40");
+		// The following test will not work on Java versions older than 2009.
+		testAstronomicalTwilight("America/Argentina/Buenos_Aires", "20131031",
+				-34.6092, -58.3732, "04:21", "20:53");
 	}
 
 	/**
