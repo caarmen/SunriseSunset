@@ -34,6 +34,11 @@ import java.util.TimeZone;
  */
 public class SunriseSunset {
 
+	public static final double SUN_ALTITUDE_SUNRISE_SUNSET = -0.833;
+	public static final double SUN_ALTITUDE_CIVIL_TWILIGHT = -6.0;
+	public static final double SUN_ALTITUDE_NAUTICAL_TWILIGHT = -12.0;
+	public static final double SUN_ALTITUDE_ASTRONOMICAL_TWILIGHT = -18.0;
+
 	private static final int JULIAN_DATE_2000_01_01 = 2451545;
 	private static final double CONST_0009 = 0.0009;
 	private static final double CONST_360 = 360;
@@ -165,6 +170,7 @@ public class SunriseSunset {
 		gregorianDateUTC.set(Calendar.HOUR_OF_DAY, hours);
 		gregorianDateUTC.set(Calendar.MINUTE, minutes);
 		gregorianDateUTC.set(Calendar.SECOND, seconds);
+		gregorianDateUTC.set(Calendar.MILLISECOND, 0);
 
 		// Convert to a Gregorian date in the local time zone.
 		Calendar gregorianDate = Calendar.getInstance();
@@ -187,7 +193,7 @@ public class SunriseSunset {
 	 */
 	public static Calendar[] getCivilTwilight(final Calendar day,
 											  final double latitude, double longitude) {
-		return getSunriseSunset(day, latitude, longitude, -6.0);
+		return getSunriseSunset(day, latitude, longitude, SUN_ALTITUDE_CIVIL_TWILIGHT);
 	}
 
 	/**
@@ -205,7 +211,7 @@ public class SunriseSunset {
 	 */
 	public static Calendar[] getNauticalTwilight(final Calendar day,
 											  final double latitude, double longitude) {
-		return getSunriseSunset(day, latitude, longitude, -12.0);
+		return getSunriseSunset(day, latitude, longitude, SUN_ALTITUDE_NAUTICAL_TWILIGHT);
 	}
 
 	/**
@@ -223,7 +229,7 @@ public class SunriseSunset {
 	 */
 	public static Calendar[] getAstronomicalTwilight(final Calendar day,
 												 final double latitude, double longitude) {
-		return getSunriseSunset(day, latitude, longitude, -18.0);
+		return getSunriseSunset(day, latitude, longitude, SUN_ALTITUDE_ASTRONOMICAL_TWILIGHT);
 	}
 
 	/**
@@ -242,7 +248,7 @@ public class SunriseSunset {
 	 */
 	public static Calendar[] getSunriseSunset(final Calendar day,
 											  final double latitude, double longitude) {
-		return getSunriseSunset(day, latitude, longitude, -0.83);
+		return getSunriseSunset(day, latitude, longitude, SUN_ALTITUDE_SUNRISE_SUNSET);
 	}
 
 	/**

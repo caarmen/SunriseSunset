@@ -214,7 +214,7 @@ public class SunriseSunsetTest {
 	@Test
 	public void testAntarctica() {
 		// There is a higher margin of error with antarctica calculations
-		double accuracyMinutes = 3.5;
+		double accuracyMinutes = 3.6;
 		testSunriseSunset("Antarctica/McMurdo", "20150419", -77.8456, 166.6693, "10:37", "15:08", accuracyMinutes);
 		testCivilTwilight("Antarctica/McMurdo", "20150419", -77.8456, 166.6693, "08:26", "17:19", accuracyMinutes);
 		testNauticalTwilight("Antarctica/McMurdo", "20150419", -77.8456, 166.6693, "06:29", "19:17", accuracyMinutes);
@@ -424,11 +424,15 @@ public class SunriseSunsetTest {
 		Calendar inputDay = parseDate(timeZoneString, inputDayString);
 
 		// Calculate the actual sunrise and sunset times.
-		Calendar[] actualSunriseSunset = SunriseSunset.getCivilTwilight(
+		Calendar[] actualTwilight = SunriseSunset.getCivilTwilight(
 				inputDay, inputLatitude, inputLongitude);
+		Calendar[] actualSunriseSunset = SunriseSunset.getSunriseSunset(inputDay, inputLatitude, inputLongitude, SunriseSunset.SUN_ALTITUDE_CIVIL_TWILIGHT);
+
+		// Make sure the results with 12 degrees correspond to the results of astronomical twilight
+		Assert.assertArrayEquals(actualTwilight, actualSunriseSunset);
 
 		// Compare the calculated times with the expected ones.
-		validateSunriseSunset(actualSunriseSunset, timeZoneString, inputDayString, expectedTwilightEndString, expectedTwilightBeginString, accuracyMinutes);
+		validateSunriseSunset(actualTwilight, timeZoneString, inputDayString, expectedTwilightEndString, expectedTwilightBeginString, accuracyMinutes);
 	}
 
 	/**
@@ -479,11 +483,15 @@ public class SunriseSunsetTest {
 		Calendar inputDay = parseDate(timeZoneString, inputDayString);
 
 		// Calculate the actual sunrise and sunset times.
-		Calendar[] actualSunriseSunset = SunriseSunset.getNauticalTwilight(
+		Calendar[] actualTwilight = SunriseSunset.getNauticalTwilight(
 				inputDay, inputLatitude, inputLongitude);
+		Calendar[] actualSunriseSunset = SunriseSunset.getSunriseSunset(inputDay, inputLatitude, inputLongitude, SunriseSunset.SUN_ALTITUDE_NAUTICAL_TWILIGHT);
+
+		// Make sure the results with 12 degrees correspond to the results of astronomical twilight
+		Assert.assertArrayEquals(actualTwilight, actualSunriseSunset);
 
 		// Compare the calculated times with the expected ones.
-		validateSunriseSunset(actualSunriseSunset, timeZoneString, inputDayString, expectedTwilightEndString, expectedTwilightBeginString, accuracyMinutes);
+		validateSunriseSunset(actualTwilight, timeZoneString, inputDayString, expectedTwilightEndString, expectedTwilightBeginString, accuracyMinutes);
 	}
 
 	/**
@@ -534,11 +542,14 @@ public class SunriseSunsetTest {
 		Calendar inputDay = parseDate(timeZoneString, inputDayString);
 
 		// Calculate the actual sunrise and sunset times.
-		Calendar[] actualSunriseSunset = SunriseSunset.getAstronomicalTwilight(
-				inputDay, inputLatitude, inputLongitude);
+		Calendar[] actualTwilight = SunriseSunset.getAstronomicalTwilight(inputDay, inputLatitude, inputLongitude);
+		Calendar[] actualSunriseSunset = SunriseSunset.getSunriseSunset(inputDay, inputLatitude, inputLongitude, SunriseSunset.SUN_ALTITUDE_ASTRONOMICAL_TWILIGHT);
+
+		// Make sure the results with 18 degrees correspond to the results of astronomical twilight
+		Assert.assertArrayEquals(actualTwilight, actualSunriseSunset);
 
 		// Compare the calculated times with the expected ones.
-		validateSunriseSunset(actualSunriseSunset, timeZoneString, inputDayString, expectedTwilightEndString, expectedTwilightBeginString, accuracyMinutes);
+		validateSunriseSunset(actualTwilight, timeZoneString, inputDayString, expectedTwilightEndString, expectedTwilightBeginString, accuracyMinutes);
 	}
 
 	/**
@@ -592,6 +603,11 @@ public class SunriseSunsetTest {
 		Calendar[] actualSunriseSunset = SunriseSunset.getSunriseSunset(
 				inputDay, inputLatitude, inputLongitude);
 
+		Calendar[] actualSunriseSunsetWithAltitude = SunriseSunset.getSunriseSunset(
+				inputDay, inputLatitude, inputLongitude, SunriseSunset.SUN_ALTITUDE_SUNRISE_SUNSET);
+
+		Assert.assertArrayEquals(actualSunriseSunset, actualSunriseSunsetWithAltitude);
+
 		// Compare the calculated times with the expected ones.
 		validateSunriseSunset(actualSunriseSunset, timeZoneString, inputDayString, expectedSunriseString, expectedSunsetString, accuracyMinutes);
 	}
@@ -602,6 +618,9 @@ public class SunriseSunsetTest {
 		// Create a Calendar for noon, in the given timezone for the given day.
 		Calendar inputDay = parseDate(tz, DATE_FORMAT_DAY, inputDayString);
 		inputDay.set(Calendar.HOUR_OF_DAY, 12);
+		inputDay.set(Calendar.MINUTE, 0);
+		inputDay.set(Calendar.SECOND, 0);
+		inputDay.set(Calendar.MILLISECOND, 0);
 
 		return inputDay;
 	}
@@ -759,6 +778,8 @@ public class SunriseSunsetTest {
 			String earliestSunriseString, String latestSunriseString,
 			String earliestSunsetString, String latestSunsetString) {
 		boolean isDay = SunriseSunset.isDay(inputLatitude, inputLongitude);
+		boolean isNight = SunriseSunset.isNight(inputLatitude, inputLongitude);
+		Assert.assertTrue("isDay and isNight must return opposite values", isDay != isNight);
 
 		Calendar now = Calendar.getInstance(TimeZone
 				.getTimeZone(timeZoneString));

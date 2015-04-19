@@ -30,7 +30,7 @@ import java.text.*;
 /**
  * Example program that illustrates how to use the SunriseSunset class.
  */
-public class SunriseSunsetCLI {
+class SunriseSunsetCLI {
 	public static void main(String[] args) throws Throwable {
 		if(args.length != 4) {
 			usage();
