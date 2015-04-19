@@ -39,6 +39,11 @@ import ca.rmen.sunrisesunset.SunriseSunset;
  */
 public class SunriseSunsetTest {
 
+	// We compare our calculations to calculations found on some websites. Some slight differences
+	// are observed sometimes between our calculations and the websites.  We tolerate a slight
+	// difference between our calculations and their calculations.
+	private static final double DEFAULT_ACCURACY_MINUTES = 2.25;
+
 	private static final SimpleDateFormat DATE_FORMAT_SECONDS = new SimpleDateFormat(
 			"yyyyMMdd HH:mm:ss z");
 	private static final SimpleDateFormat DATE_FORMAT_MINUTES = new SimpleDateFormat(
@@ -186,6 +191,31 @@ public class SunriseSunsetTest {
 		}
 	}
 
+	@Test
+	public void testAntarctica() {
+		// There is a higher margin of error with antarctica calculations
+		double accuracyMinutes = 3.5;
+		testSunriseSunset("Antarctica/McMurdo", "20150419", -77.8456, 166.6693, "10:37", "15:08", accuracyMinutes);
+		testCivilTwilight("Antarctica/McMurdo", "20150419", -77.8456, 166.6693, "08:26", "17:19", accuracyMinutes);
+		testNauticalTwilight("Antarctica/McMurdo", "20150419", -77.8456, 166.6693, "06:29", "19:17", accuracyMinutes);
+		testAstronomicalTwilight("Antarctica/McMurdo", "20150419", -77.8456, 166.6693, "04:27", "21:18", accuracyMinutes);
+
+		testSunriseSunset("Antarctica/McMurdo", "20150621", -77.8456, 166.6693, null, null);
+		testCivilTwilight("Antarctica/McMurdo", "20150621", -77.8456, 166.6693, null, null);
+		testNauticalTwilight("Antarctica/McMurdo", "20150621", -77.8456, 166.6693, "11:33", "14:17", accuracyMinutes);
+		testAstronomicalTwilight("Antarctica/McMurdo", "20150621", -77.8456, 166.6693, "08:32", "17:17", accuracyMinutes);
+
+		testSunriseSunset("Antarctica/McMurdo", "20150921", -77.8456, 166.6693, "06:48", "18:46", accuracyMinutes);
+		testCivilTwilight("Antarctica/McMurdo", "20150921", -77.8456, 166.6693, "5:07", "20:27", accuracyMinutes);
+		// Not sure why this one is off more... 2:23 vs 2:28
+		testNauticalTwilight("Antarctica/McMurdo", "20150921", -77.8456, 166.6693, "02:23", "23:11", 5.1);
+		testAstronomicalTwilight("Antarctica/McMurdo", "20150921", -77.8456, 166.6693, null, null);
+
+		testSunriseSunset("Antarctica/McMurdo", "20151221", -77.8456, 166.6693, null, null);
+		testCivilTwilight("Antarctica/McMurdo", "20151221", -77.8456, 166.6693, null, null);
+		testNauticalTwilight("Antarctica/McMurdo", "20151221", -77.8456, 166.6693, null, null);
+		testAstronomicalTwilight("Antarctica/McMurdo", "20151221", -77.8456, 166.6693, null, null);
+	}
 	/**
 	 * Test the time of sunrise and sunset for some locations.
 	 */
@@ -346,6 +376,31 @@ public class SunriseSunsetTest {
 	private void testCivilTwilight(String timeZoneString,
 								   String inputDayString, double inputLatitude, double inputLongitude,
 								   String expectedTwilightEndString, String expectedTwilightBeginString) {
+		testCivilTwilight(timeZoneString, inputDayString, inputLatitude, inputLongitude, expectedTwilightEndString, expectedTwilightBeginString, DEFAULT_ACCURACY_MINUTES);
+	}
+
+	/**
+	 * @param timeZoneString
+	 *            a valid Java timezone
+	 * @param inputDayString
+	 *            a day in the format {@link #DATE_FORMAT_DAY}
+	 * @param inputLatitude
+	 *            the latitude of a given location
+	 * @param inputLongitude
+	 *            the longitude of a given location (West is negative).
+	 * @param expectedTwilightEndString
+	 *            the time the twilight is expected to end, in the format HH:mm. The
+	 *            time should be in the timezone of the parameter
+	 *            timeZoneString.
+	 * @param expectedTwilightBeginString
+	 *            the time the twilight is expected to begin, in the format HH:mm. The time
+	 *            should be in the timezone of the parameter timeZoneString.
+	 * @param accuracyMinutes
+	 *            the difference between the expected and calculated twilight times we allow for the test to pass.
+	 */
+	private void testCivilTwilight(String timeZoneString,
+								   String inputDayString, double inputLatitude, double inputLongitude,
+								   String expectedTwilightEndString, String expectedTwilightBeginString, double accuracyMinutes) {
 		Calendar inputDay = parseDate(timeZoneString, inputDayString);
 
 		// Calculate the actual sunrise and sunset times.
@@ -353,7 +408,7 @@ public class SunriseSunsetTest {
 				inputDay, inputLatitude, inputLongitude);
 
 		// Compare the calculated times with the expected ones.
-		validateSunriseSunset(actualSunriseSunset, timeZoneString, inputDayString, expectedTwilightEndString, expectedTwilightBeginString);
+		validateSunriseSunset(actualSunriseSunset, timeZoneString, inputDayString, expectedTwilightEndString, expectedTwilightBeginString, accuracyMinutes);
 	}
 
 	/**
@@ -374,8 +429,33 @@ public class SunriseSunsetTest {
 	 *            should be in the timezone of the parameter timeZoneString.
 	 */
 	private void testNauticalTwilight(String timeZoneString,
+									  String inputDayString, double inputLatitude, double inputLongitude,
+									  String expectedTwilightEndString, String expectedTwilightBeginString) {
+		testNauticalTwilight(timeZoneString, inputDayString, inputLatitude, inputLongitude, expectedTwilightEndString, expectedTwilightBeginString, DEFAULT_ACCURACY_MINUTES);
+	}
+
+	/**
+	 * @param timeZoneString
+	 *            a valid Java timezone
+	 * @param inputDayString
+	 *            a day in the format {@link #DATE_FORMAT_DAY}
+	 * @param inputLatitude
+	 *            the latitude of a given location
+	 * @param inputLongitude
+	 *            the longitude of a given location (West is negative).
+	 * @param expectedTwilightEndString
+	 *            the time the twilight is expected to end, in the format HH:mm. The
+	 *            time should be in the timezone of the parameter
+	 *            timeZoneString.
+	 * @param expectedTwilightBeginString
+	 *            the time the twilight is expected to begin, in the format HH:mm. The time
+	 *            should be in the timezone of the parameter timeZoneString.
+	 * @param accuracyMinutes
+	 *            the difference between the expected and calculated twilight times we allow for the test to pass.
+	 */
+	private void testNauticalTwilight(String timeZoneString,
 								   String inputDayString, double inputLatitude, double inputLongitude,
-								   String expectedTwilightEndString, String expectedTwilightBeginString) {
+								   String expectedTwilightEndString, String expectedTwilightBeginString, double accuracyMinutes) {
 		Calendar inputDay = parseDate(timeZoneString, inputDayString);
 
 		// Calculate the actual sunrise and sunset times.
@@ -383,7 +463,7 @@ public class SunriseSunsetTest {
 				inputDay, inputLatitude, inputLongitude);
 
 		// Compare the calculated times with the expected ones.
-		validateSunriseSunset(actualSunriseSunset, timeZoneString, inputDayString, expectedTwilightEndString, expectedTwilightBeginString);
+		validateSunriseSunset(actualSunriseSunset, timeZoneString, inputDayString, expectedTwilightEndString, expectedTwilightBeginString, accuracyMinutes);
 	}
 
 	/**
@@ -404,8 +484,33 @@ public class SunriseSunsetTest {
 	 *            should be in the timezone of the parameter timeZoneString.
 	 */
 	private void testAstronomicalTwilight(String timeZoneString,
+										  String inputDayString, double inputLatitude, double inputLongitude,
+										  String expectedTwilightEndString, String expectedTwilightBeginString) {
+		testAstronomicalTwilight(timeZoneString, inputDayString, inputLatitude, inputLongitude, expectedTwilightEndString, expectedTwilightBeginString, DEFAULT_ACCURACY_MINUTES);
+	}
+
+	/**
+	 * @param timeZoneString
+	 *            a valid Java timezone
+	 * @param inputDayString
+	 *            a day in the format {@link #DATE_FORMAT_DAY}
+	 * @param inputLatitude
+	 *            the latitude of a given location
+	 * @param inputLongitude
+	 *            the longitude of a given location (West is negative).
+	 * @param expectedTwilightEndString
+	 *            the time the twilight is expected to end, in the format HH:mm. The
+	 *            time should be in the timezone of the parameter
+	 *            timeZoneString.
+	 * @param expectedTwilightBeginString
+	 *            the time the twilight is expected to begin, in the format HH:mm. The time
+	 *            should be in the timezone of the parameter timeZoneString.
+	 * @param accuracyMinutes
+	 *            the difference between the expected and calculated twilight times we allow for the test to pass.
+	 */
+	private void testAstronomicalTwilight(String timeZoneString,
 									  String inputDayString, double inputLatitude, double inputLongitude,
-									  String expectedTwilightEndString, String expectedTwilightBeginString) {
+									  String expectedTwilightEndString, String expectedTwilightBeginString, double accuracyMinutes) {
 		Calendar inputDay = parseDate(timeZoneString, inputDayString);
 
 		// Calculate the actual sunrise and sunset times.
@@ -413,7 +518,7 @@ public class SunriseSunsetTest {
 				inputDay, inputLatitude, inputLongitude);
 
 		// Compare the calculated times with the expected ones.
-		validateSunriseSunset(actualSunriseSunset, timeZoneString, inputDayString, expectedTwilightEndString, expectedTwilightBeginString);
+		validateSunriseSunset(actualSunriseSunset, timeZoneString, inputDayString, expectedTwilightEndString, expectedTwilightBeginString, accuracyMinutes);
 	}
 
 	/**
@@ -434,8 +539,33 @@ public class SunriseSunsetTest {
 	 *            should be in the timezone of the parameter timeZoneString.
 	 */
 	private void testSunriseSunset(String timeZoneString,
+								   String inputDayString, double inputLatitude, double inputLongitude,
+								   String expectedSunriseString, String expectedSunsetString) {
+		testSunriseSunset(timeZoneString, inputDayString, inputLatitude, inputLongitude, expectedSunriseString, expectedSunsetString, DEFAULT_ACCURACY_MINUTES);
+	}
+
+	/**
+	 * @param timeZoneString
+	 *            a valid Java timezone
+	 * @param inputDayString
+	 *            a day in the format {@link #DATE_FORMAT_DAY}
+	 * @param inputLatitude
+	 *            the latitude of a given location
+	 * @param inputLongitude
+	 *            the longitude of a given location (West is negative).
+	 * @param expectedSunriseString
+	 *            the time the sunrise is expected, in the format HH:mm. The
+	 *            time should be in the timezone of the parameter
+	 *            timeZoneString.
+	 * @param expectedSunsetString
+	 *            the time the sunset is expected, in the format HH:mm. The time
+	 *            should be in the timezone of the parameter timeZoneString.
+	 * @param accuracyMinutes
+	 *            the difference between the expected and calculated sunrise and sunset times we allow for the test to pass.
+	 */
+	private void testSunriseSunset(String timeZoneString,
 			String inputDayString, double inputLatitude, double inputLongitude,
-			String expectedSunriseString, String expectedSunsetString) {
+			String expectedSunriseString, String expectedSunsetString, double accuracyMinutes) {
 		Calendar inputDay = parseDate(timeZoneString, inputDayString);
 
 		// Calculate the actual sunrise and sunset times.
@@ -443,7 +573,7 @@ public class SunriseSunsetTest {
 				inputDay, inputLatitude, inputLongitude);
 
 		// Compare the calculated times with the expected ones.
-		validateSunriseSunset(actualSunriseSunset, timeZoneString, inputDayString, expectedSunriseString, expectedSunsetString);
+		validateSunriseSunset(actualSunriseSunset, timeZoneString, inputDayString, expectedSunriseString, expectedSunsetString, accuracyMinutes);
 	}
 
 	private Calendar parseDate(String timeZoneString, String inputDayString) {
@@ -455,9 +585,14 @@ public class SunriseSunsetTest {
 
 		return inputDay;
 	}
-
 	private void validateSunriseSunset(Calendar[] actualSunriseSunset, String timeZoneString, String inputDayString,
 									   String expectedSunriseString, String expectedSunsetString) {
+		validateSunriseSunset(actualSunriseSunset, timeZoneString, inputDayString, expectedSunriseString, expectedSunsetString, DEFAULT_ACCURACY_MINUTES);
+
+	}
+
+	private void validateSunriseSunset(Calendar[] actualSunriseSunset, String timeZoneString, String inputDayString,
+									   String expectedSunriseString, String expectedSunsetString, double accuracyMinutes) {
 
 		if(expectedSunriseString == null || expectedSunsetString == null) {
 			Assert.assertNull(actualSunriseSunset);
@@ -477,11 +612,11 @@ public class SunriseSunsetTest {
 				inputDayString + " " + expectedSunsetString);
 
 		// Compare the actual and expected sunrise/sunset times. Allow a margin
-		// of error of 3 minutes.
+		// of error.
 		assertEqualsOrAlmostEquals(expectedSunrise, expectedSunriseString,
-				actualSunrise, actualSunriseString, 180000);
+				actualSunrise, actualSunriseString, (int) (accuracyMinutes * 60000));
 		assertEqualsOrAlmostEquals(expectedSunset, expectedSunsetString,
-				actualSunset, actualSunsetString, 180000);
+				actualSunset, actualSunsetString, (int) (accuracyMinutes * 60000));
 
 	}
 
