@@ -26,7 +26,7 @@ Declare the dependency:
 classpath 'ca.rmen:lib-sunrise-sunset:1.0.0'
 ```
 Alternatively, you can just copy the single java file into your project:
-(library/src/main/java/ca/rmen/sunrisesunset/SunriseSunset.java)
+[library/src/main/java/ca/rmen/sunrisesunset/SunriseSunset.java](library/src/main/java/ca/rmen/sunrisesunset/SunriseSunset.java)
 Using the library
 =================
 To get the sunrise and sunset times for today in Paris, France:
