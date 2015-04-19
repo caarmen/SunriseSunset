@@ -72,3 +72,7 @@ Calendar[] astronomicalTwilight = ca.rmen.sunrisesunset.SunriseSunset.getAstrono
 System.out.println("Astronomical twilight stops at: " + astronomicalTwilight[0].getTime());
 System.out.println("Astronomical twilight starts at: " + astronomicalTwilight[1].getTime());
 ```
+
+Documentation
+=============
+Javadoc is here: [http://caarmen.github.io/SunriseSunset/] http://caarmen.github.io/SunriseSunset/
