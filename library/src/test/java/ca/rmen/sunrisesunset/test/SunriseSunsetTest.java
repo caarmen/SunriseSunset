@@ -25,8 +25,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import ca.rmen.sunrisesunset.SunriseSunset;
@@ -73,6 +74,7 @@ public class SunriseSunsetTest {
 	 * Not a unit test, but helpful for troubleshooting and adding new unit
 	 * tests. This method logs the list of Java timezone ids.
 	 */
+	@Ignore
 	@Test
 	public void logTimezoneIds() {
 		String[] timezoneIds = TimeZone.getAvailableIDs();
@@ -762,7 +764,6 @@ public class SunriseSunsetTest {
 			String earliestSunriseString, String latestSunriseString,
 			String earliestSunsetString, String latestSunsetString) {
 		boolean isDay = SunriseSunset.isDay(inputLatitude, inputLongitude);
-		System.out.println(name + ": Currently " + (isDay ? "day" : "night"));
 
 		Calendar now = Calendar.getInstance(TimeZone
 				.getTimeZone(timeZoneString));
