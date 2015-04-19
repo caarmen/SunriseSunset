@@ -27,7 +27,7 @@
 	<groupId>ca.rmen</groupId>
 	<artifactId>sunrise-sunset</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<name>sunrise-sunset</name>
 	<url>http://rmen.ca</url>
 
@@ -59,6 +59,11 @@
 					<source>1.5</source>
 					<target>1.5</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-install-plugin</artifactId>
+				<version>2.5.2</version>
 			</plugin>
 		</plugins>
 	</build>
