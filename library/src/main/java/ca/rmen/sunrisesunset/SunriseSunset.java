@@ -1,6 +1,6 @@
 /*
  * Sunrise Sunset Calculator.
- * Copyright (C) 2013 Carmen Alvarez
+ * Copyright (C) 2013-2015 Carmen Alvarez
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,13 +23,12 @@ import java.util.TimeZone;
 
 /**
  * Provides methods to determine the sunrise and sunset time of a given
- * location, or if it is currently day or night at a given location. <br/>
- * Also provides methods to convert between Gregorian and Julian dates.<br/>
+ * location, or if it is currently day or night at a given location. <br>
+ * Also provides methods to convert between Gregorian and Julian dates.<br>
  * The formulas used by this class are from the Wikipedia articles on Julian Day
- * and Sunrise Equation. <br/>
- * {@link "http://en.wikipedia.org/wiki/Julian_day"} <br/>
- * {@link "http://en.wikipedia.org/wiki/Sunrise_equation"}
- * 
+ * and Sunrise Equation. <br>
+ * @see <a href="http://en.wikipedia.org/wiki/Julian_day">Julien Day on Wikipedia</a>
+ * @see <a href="http://en.wikipedia.org/wiki/Sunrise_equation">Sunrise equation on Wikipedia</a>
  * @author Carmen Alvarez
  * 
  */
@@ -45,7 +44,7 @@ public class SunriseSunset {
 	 * 
 	 * This is based on the Wikipedia article for Julian day.
 	 * 
-	 * {@link "http://en.wikipedia.org/wiki/Julian_day#Converting_Julian_or_Gregorian_calendar_date_to_Julian_Day_Number"}
+	 * @see <a href="http://en.wikipedia.org/wiki/Julian_day#Converting_Julian_or_Gregorian_calendar_date_to_Julian_Day_Number">Converting to Julien day number on Wikipedia</a>
 	 * 
 	 * @param gregorianDate
 	 *            Gregorian date in any time zone.
@@ -84,8 +83,9 @@ public class SunriseSunset {
 	 * 
 	 * This is based on the Wikipedia article for Julian day.
 	 * 
-	 * {@link "http://en.wikipedia.org/wiki/Julian_day#Gregorian_calendar_from_Julian_day_number"}
-	 * 
+	 * @see <a href="http://en.wikipedia.org/wiki/Julian_day#Gregorian_calendar_from_Julian_day_number">Converting from Julien day to Gregorian date, on Wikipedia</a>
+	 *
+	 * @param julianDate The date to convert
 	 * @return a Gregorian date in the local time zone.
 	 */
 	public static Calendar getGregorianDate(final double julianDate) {
@@ -230,7 +230,7 @@ public class SunriseSunset {
 	/**
 	 * Calculate the sunrise and sunset times for the given date and given
 	 * location. This is based on the Wikipedia article on the Sunrise equation:
-	 * {@link "http://en.wikipedia.org/wiki/Sunrise_equation"}
+	 * @see <a href="http://en.wikipedia.org/wiki/Sunrise_equation">Sunrise equation on Wikipedia</a>
 	 *
 	 * @param day
 	 *            The day for which to calculate sunrise and sunset
@@ -250,7 +250,7 @@ public class SunriseSunset {
 	 * Calculate the sunrise and sunset times for the given date, given
 	 * location, and sun altitude.
 	 * This is based on the Wikipedia article on the Sunrise equation:
-	 * {@link "http://en.wikipedia.org/wiki/Sunrise_equation"}
+	 * @see <a href="http://en.wikipedia.org/wiki/Sunrise_equation">Sunrise equation on Wikipedia</a>
 	 * 
 	 * @param day
 	 *            The day for which to calculate sunrise and sunset
