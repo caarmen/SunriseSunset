@@ -7,7 +7,7 @@
 
   <parent>
     <groupId>ca.rmen</groupId>
-    <artifactId>parent</artifactId>
+    <artifactId>sunrise-sunset</artifactId>
     <version>1.0.0</version>
   </parent>
 

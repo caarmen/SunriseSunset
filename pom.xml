@@ -6,7 +6,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>ca.rmen</groupId>
-  <artifactId>parent</artifactId>
+  <artifactId>sunrise-sunset</artifactId>
   <packaging>pom</packaging>
   <version>1.0.0</version>
   <name>sunrise-sunset</name>
