@@ -32,7 +32,7 @@ import java.text.*;
  */
 class SunriseSunsetCLI {
 	public static void main(String[] args) throws Throwable {
-		if(args.length != 4) {
+		if (args.length != 4) {
 			usage();
 			return;
 		}

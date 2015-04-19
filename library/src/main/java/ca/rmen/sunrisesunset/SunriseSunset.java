@@ -27,10 +27,10 @@ import java.util.TimeZone;
  * Also provides methods to convert between Gregorian and Julian dates.<br>
  * The formulas used by this class are from the Wikipedia articles on Julian Day
  * and Sunrise Equation. <br>
+ *
+ * @author Carmen Alvarez
  * @see <a href="http://en.wikipedia.org/wiki/Julian_day">Julien Day on Wikipedia</a>
  * @see <a href="http://en.wikipedia.org/wiki/Sunrise_equation">Sunrise equation on Wikipedia</a>
- * @author Carmen Alvarez
- * 
  */
 public class SunriseSunset {
 
@@ -46,14 +46,12 @@ public class SunriseSunset {
 	/**
 	 * Convert a Gregorian calendar date to a Julian date. Accuracy is to the
 	 * second.
-	 * 
+	 * <br>
 	 * This is based on the Wikipedia article for Julian day.
-	 * 
-	 * @see <a href="http://en.wikipedia.org/wiki/Julian_day#Converting_Julian_or_Gregorian_calendar_date_to_Julian_Day_Number">Converting to Julien day number on Wikipedia</a>
-	 * 
-	 * @param gregorianDate
-	 *            Gregorian date in any time zone.
+	 *
+	 * @param gregorianDate Gregorian date in any time zone.
 	 * @return the Julian date for the given Gregorian date.
+	 * @see <a href="http://en.wikipedia.org/wiki/Julian_day#Converting_Julian_or_Gregorian_calendar_date_to_Julian_Day_Number">Converting to Julien day number on Wikipedia</a>
 	 */
 	public static double getJulianDate(final Calendar gregorianDate) {
 		// Convert the date to the UTC time zone.
@@ -84,13 +82,12 @@ public class SunriseSunset {
 	/**
 	 * Convert a Julian date to a Gregorian date. The Gregorian date will be in
 	 * the local time zone. Accuracy is to the second.
-	 * 
+	 * <br>
 	 * This is based on the Wikipedia article for Julian day.
-	 * 
-	 * @see <a href="http://en.wikipedia.org/wiki/Julian_day#Gregorian_calendar_from_Julian_day_number">Converting from Julien day to Gregorian date, on Wikipedia</a>
 	 *
 	 * @param julianDate The date to convert
 	 * @return a Gregorian date in the local time zone.
+	 * @see <a href="http://en.wikipedia.org/wiki/Julian_day#Gregorian_calendar_from_Julian_day_number">Converting from Julien day to Gregorian date, on Wikipedia</a>
 	 */
 	public static Calendar getGregorianDate(final double julianDate) {
 
@@ -180,16 +177,14 @@ public class SunriseSunset {
 
 	/**
 	 * Calculate the civil twilight time for the given date and given location.
-	 * @param day
-	 *            The day for which to calculate civil twilight
-	 * @param latitude
-	 *            the latitude of the location in degrees.
-	 * @param longitude
-	 *            the longitude of the location in degrees (West is negative)
+	 *
+	 * @param day       The day for which to calculate civil twilight
+	 * @param latitude  the latitude of the location in degrees.
+	 * @param longitude the longitude of the location in degrees (West is negative)
 	 * @return a two-element Gregorian Calendar array. The first element is the
-	 *         end of civil twilight, the second element is the beginning of civil
-	 *         twilight.
-	 *         This will return null if there is no civil twilight. (Ex: no twilight in Antarctica in December)
+	 * end of civil twilight, the second element is the beginning of civil
+	 * twilight.
+	 * This will return null if there is no civil twilight. (Ex: no twilight in Antarctica in December)
 	 */
 	public static Calendar[] getCivilTwilight(final Calendar day,
 											  final double latitude, double longitude) {
@@ -198,53 +193,46 @@ public class SunriseSunset {
 
 	/**
 	 * Calculate the nautical twilight time for the given date and given location.
-	 * @param day
-	 *            The day for which to calculate nautical twilight
-	 * @param latitude
-	 *            the latitude of the location in degrees.
-	 * @param longitude
-	 *            the longitude of the location in degrees (West is negative)
+	 *
+	 * @param day       The day for which to calculate nautical twilight
+	 * @param latitude  the latitude of the location in degrees.
+	 * @param longitude the longitude of the location in degrees (West is negative)
 	 * @return a two-element Gregorian Calendar array. The first element is the
-	 *         end of nautical twilight, the second element is the beginning of
-	 *         nautical twilight.
-	 *         This will return null if there is no nautical twilight. (Ex: no twilight in Antarctica in December)
+	 * end of nautical twilight, the second element is the beginning of
+	 * nautical twilight.
+	 * This will return null if there is no nautical twilight. (Ex: no twilight in Antarctica in December)
 	 */
 	public static Calendar[] getNauticalTwilight(final Calendar day,
-											  final double latitude, double longitude) {
+												 final double latitude, double longitude) {
 		return getSunriseSunset(day, latitude, longitude, SUN_ALTITUDE_NAUTICAL_TWILIGHT);
 	}
 
 	/**
 	 * Calculate the astronomical twilight time for the given date and given location.
-	 * @param day
-	 *            The day for which to calculate astronomical twilight
-	 * @param latitude
-	 *            the latitude of the location in degrees.
-	 * @param longitude
-	 *            the longitude of the location in degrees (West is negative)
+	 *
+	 * @param day       The day for which to calculate astronomical twilight
+	 * @param latitude  the latitude of the location in degrees.
+	 * @param longitude the longitude of the location in degrees (West is negative)
 	 * @return a two-element Gregorian Calendar array. The first element is the
-	 *         end of astronomical twilight, the second element is the beginning of
-	 *         astronomical twilight.
-	 *         This will return null if there is no astronomical twilight. (Ex: no twilight in Antarctica in December)
+	 * end of astronomical twilight, the second element is the beginning of
+	 * astronomical twilight.
+	 * This will return null if there is no astronomical twilight. (Ex: no twilight in Antarctica in December)
 	 */
 	public static Calendar[] getAstronomicalTwilight(final Calendar day,
-												 final double latitude, double longitude) {
+													 final double latitude, double longitude) {
 		return getSunriseSunset(day, latitude, longitude, SUN_ALTITUDE_ASTRONOMICAL_TWILIGHT);
 	}
 
 	/**
 	 * Calculate the sunrise and sunset times for the given date and given
 	 * location. This is based on the Wikipedia article on the Sunrise equation:
-	 * @see <a href="http://en.wikipedia.org/wiki/Sunrise_equation">Sunrise equation on Wikipedia</a>
 	 *
-	 * @param day
-	 *            The day for which to calculate sunrise and sunset
-	 * @param latitude
-	 *            the latitude of the location in degrees.
-	 * @param longitude
-	 *            the longitude of the location in degrees (West is negative)
+	 * @param day       The day for which to calculate sunrise and sunset
+	 * @param latitude  the latitude of the location in degrees.
+	 * @param longitude the longitude of the location in degrees (West is negative)
 	 * @return a two-element Gregorian Calendar array. The first element is the
-	 *         sunrise, the second element is the sunset. This will return null if there is no sunrise or sunset. (Ex: no sunrise in Antarctica in June)
+	 * sunrise, the second element is the sunset. This will return null if there is no sunrise or sunset. (Ex: no sunrise in Antarctica in June)
+	 * @see <a href="http://en.wikipedia.org/wiki/Sunrise_equation">Sunrise equation on Wikipedia</a>
 	 */
 	public static Calendar[] getSunriseSunset(final Calendar day,
 											  final double latitude, double longitude) {
@@ -255,21 +243,17 @@ public class SunriseSunset {
 	 * Calculate the sunrise and sunset times for the given date, given
 	 * location, and sun altitude.
 	 * This is based on the Wikipedia article on the Sunrise equation:
-	 * @see <a href="http://en.wikipedia.org/wiki/Sunrise_equation">Sunrise equation on Wikipedia</a>
-	 * 
-	 * @param day
-	 *            The day for which to calculate sunrise and sunset
-	 * @param latitude
-	 *            the latitude of the location in degrees.
-	 * @param longitude
-	 *            the longitude of the location in degrees (West is negative)
-	 * @param sunAltitude
-	 *            the angle between the horizon and the centre of the sun's disc (http://en.wikipedia.org/wiki/Solar_zenith_angle#Solar_elevation_angle).
+	 *
+	 * @param day         The day for which to calculate sunrise and sunset
+	 * @param latitude    the latitude of the location in degrees.
+	 * @param longitude   the longitude of the location in degrees (West is negative)
+	 * @param sunAltitude the angle between the horizon and the centre of the sun's disc (http://en.wikipedia.org/wiki/Solar_zenith_angle#Solar_elevation_angle).
 	 * @return a two-element Gregorian Calendar array. The first element is the
-	 *         sunrise, the second element is the sunset. This will return null if there is no sunrise or sunset. (Ex: no sunrise in Antarctica in June)
+	 * sunrise, the second element is the sunset. This will return null if there is no sunrise or sunset. (Ex: no sunrise in Antarctica in June)
+	 * @see <a href="http://en.wikipedia.org/wiki/Sunrise_equation">Sunrise equation on Wikipedia</a>
 	 */
 	public static Calendar[] getSunriseSunset(final Calendar day,
-			final double latitude, double longitude, double sunAltitude) {
+											  final double latitude, double longitude, double sunAltitude) {
 		final double latitudeRad = Math.toRadians(latitude);
 
 		longitude = -longitude;
@@ -311,7 +295,7 @@ public class SunriseSunset {
 				.sin(latitudeRad) * Math.sin(delta))
 				/ (Math.cos(latitudeRad) * Math.cos(delta)));
 
-		if(Double.isNaN(omega)) {
+		if (Double.isNaN(omega)) {
 			return null;
 		}
 
@@ -319,7 +303,7 @@ public class SunriseSunset {
 		final double jset = JULIAN_DATE_2000_01_01
 				+ CONST_0009
 				+ ((Math.toDegrees(omega) + longitude) / CONST_360 + n + 0.0053
-						* Math.sin(m) - 0.0069 * Math.sin(2 * lambda));
+				* Math.sin(m) - 0.0069 * Math.sin(2 * lambda));
 
 		// Sunrise
 		final double jrise = jtransit - (jset - jtransit);
@@ -332,30 +316,26 @@ public class SunriseSunset {
 		gregRise.setTimeInMillis(gregRiseUTC.getTimeInMillis());
 		final Calendar gregSet = Calendar.getInstance(day.getTimeZone());
 		gregSet.setTimeInMillis(gregSetUTC.getTimeInMillis());
-		return new Calendar[] { gregRise, gregSet };
+		return new Calendar[]{gregRise, gregSet};
 	}
 
 	/**
-	 * @param latitude
-	 *            the latitude of the location in degrees.
-	 * @param longitude
-	 *            the longitude of the location in degrees (West is negative)
+	 * @param latitude  the latitude of the location in degrees.
+	 * @param longitude the longitude of the location in degrees (West is negative)
 	 * @return true if it is currently day at the given location. This returns
-	 *         true if the current time at the location is after the sunrise and
-	 *         before the sunset for that location.
+	 * true if the current time at the location is after the sunrise and
+	 * before the sunset for that location.
 	 */
 	public static boolean isDay(double latitude, double longitude) {
 		return !isNight(latitude, longitude);
 	}
 
 	/**
-	 * @param latitude
-	 *            the latitude of the location in degrees.
-	 * @param longitude
-	 *            the longitude of the location in degrees (West is negative)
+	 * @param latitude  the latitude of the location in degrees.
+	 * @param longitude the longitude of the location in degrees (West is negative)
 	 * @return true if it is currently night at the given location. This returns
-	 *         true if the current time at the location is before the sunrise or
-	 *         after the sunset for that location.
+	 * true if the current time at the location is before the sunrise or
+	 * after the sunset for that location.
 	 */
 	public static boolean isNight(double latitude, double longitude) {
 		Calendar today = Calendar.getInstance();
