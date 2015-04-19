@@ -28,6 +28,14 @@ classpath 'ca.rmen:lib-sunrise-sunset:1.0.0'
 ```
 Maven:
 ------
+Add this repository:
+```
+<repository>
+ <id>caarmen-repo</id>
+ <url>https://dl.bintray.com/caarmen/maven/</url>
+</repository>
+```
+Declare the dependency:
 ```
 <dependency>
  <groupId>ca.rmen</groupId>
