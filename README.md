@@ -16,6 +16,7 @@ Adding the dependency
 =====================
 
 Gradle:
+-------
 Add this repository:
 ```
 maven { url "https://dl.bintray.com/caarmen/maven/" }
@@ -25,6 +26,9 @@ Declare the dependency:
 ```
 classpath 'ca.rmen:lib-sunrise-sunset:1.0.0'
 ```
+
+Just copy the file:
+-------------------
 Alternatively, you can just copy the single java file into your project:
 [library/src/main/java/ca/rmen/sunrisesunset/SunriseSunset.java](library/src/main/java/ca/rmen/sunrisesunset/SunriseSunset.java)
 Using the library
