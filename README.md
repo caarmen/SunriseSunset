@@ -75,4 +75,4 @@ System.out.println("Astronomical twilight starts at: " + astronomicalTwilight[1]
 
 Documentation
 =============
-Javadoc is here: [http://caarmen.github.io/SunriseSunset/] http://caarmen.github.io/SunriseSunset/
+Javadoc is here: http://caarmen.github.io/SunriseSunset/ca/rmen/sunrisesunset/SunriseSunset.html
