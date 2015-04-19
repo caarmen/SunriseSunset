@@ -29,19 +29,38 @@ import java.util.TimeZone;
  * and Sunrise Equation. <br>
  *
  * @author Carmen Alvarez
- * @see <a href="http://en.wikipedia.org/wiki/Julian_day">Julien Day on Wikipedia</a>
+ * @see <a href="http://en.wikipedia.org/wiki/Julian_day">Julian Day on Wikipedia</a>
  * @see <a href="http://en.wikipedia.org/wiki/Sunrise_equation">Sunrise equation on Wikipedia</a>
  */
 public class SunriseSunset {
 
+	/**
+	 * The altitude of the sun (solar elevation angle) at the moment of sunrise or sunset: -0.833
+	 */
 	public static final double SUN_ALTITUDE_SUNRISE_SUNSET = -0.833;
+
+	/**
+	 * The altitude of the sun (solar elevation angle) at the moment of civil twilight: -6.0
+	 */
 	public static final double SUN_ALTITUDE_CIVIL_TWILIGHT = -6.0;
+
+	/**
+	 * The altitude of the sun (solar elevation angle) at the moment of nautical twilight: -12.0
+	 */
 	public static final double SUN_ALTITUDE_NAUTICAL_TWILIGHT = -12.0;
+
+	/**
+	 * The altitude of the sun (solar elevation angle) at the moment of astronomical twilight: -18.0
+	 */
 	public static final double SUN_ALTITUDE_ASTRONOMICAL_TWILIGHT = -18.0;
 
 	private static final int JULIAN_DATE_2000_01_01 = 2451545;
 	private static final double CONST_0009 = 0.0009;
 	private static final double CONST_360 = 360;
+
+	private SunriseSunset() {
+		// Prevent instantiation of this utility class
+	}
 
 	/**
 	 * Convert a Gregorian calendar date to a Julian date. Accuracy is to the
@@ -51,7 +70,7 @@ public class SunriseSunset {
 	 *
 	 * @param gregorianDate Gregorian date in any time zone.
 	 * @return the Julian date for the given Gregorian date.
-	 * @see <a href="http://en.wikipedia.org/wiki/Julian_day#Converting_Julian_or_Gregorian_calendar_date_to_Julian_Day_Number">Converting to Julien day number on Wikipedia</a>
+	 * @see <a href="http://en.wikipedia.org/wiki/Julian_day#Converting_Julian_or_Gregorian_calendar_date_to_Julian_Day_Number">Converting to Julian day number on Wikipedia</a>
 	 */
 	public static double getJulianDate(final Calendar gregorianDate) {
 		// Convert the date to the UTC time zone.
@@ -87,7 +106,7 @@ public class SunriseSunset {
 	 *
 	 * @param julianDate The date to convert
 	 * @return a Gregorian date in the local time zone.
-	 * @see <a href="http://en.wikipedia.org/wiki/Julian_day#Gregorian_calendar_from_Julian_day_number">Converting from Julien day to Gregorian date, on Wikipedia</a>
+	 * @see <a href="http://en.wikipedia.org/wiki/Julian_day#Gregorian_calendar_from_Julian_day_number">Converting from Julian day to Gregorian date, on Wikipedia</a>
 	 */
 	public static Calendar getGregorianDate(final double julianDate) {
 
@@ -225,7 +244,7 @@ public class SunriseSunset {
 
 	/**
 	 * Calculate the sunrise and sunset times for the given date and given
-	 * location. This is based on the Wikipedia article on the Sunrise equation:
+	 * location. This is based on the Wikipedia article on the Sunrise equation.
 	 *
 	 * @param day       The day for which to calculate sunrise and sunset
 	 * @param latitude  the latitude of the location in degrees.
@@ -242,12 +261,12 @@ public class SunriseSunset {
 	/**
 	 * Calculate the sunrise and sunset times for the given date, given
 	 * location, and sun altitude.
-	 * This is based on the Wikipedia article on the Sunrise equation:
+	 * This is based on the Wikipedia article on the Sunrise equation.
 	 *
 	 * @param day         The day for which to calculate sunrise and sunset
 	 * @param latitude    the latitude of the location in degrees.
 	 * @param longitude   the longitude of the location in degrees (West is negative)
-	 * @param sunAltitude the angle between the horizon and the centre of the sun's disc (http://en.wikipedia.org/wiki/Solar_zenith_angle#Solar_elevation_angle).
+	 * @param sunAltitude <a href="http://en.wikipedia.org/wiki/Solar_zenith_angle#Solar_elevation_angle">the angle between the horizon and the center of the sun's disc.</a>
 	 * @return a two-element Gregorian Calendar array. The first element is the
 	 * sunrise, the second element is the sunset. This will return null if there is no sunrise or sunset. (Ex: no sunrise in Antarctica in June)
 	 * @see <a href="http://en.wikipedia.org/wiki/Sunrise_equation">Sunrise equation on Wikipedia</a>
