@@ -22,7 +22,8 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 /**
- * Provides methods to determine the sunrise and sunset time of a given
+ * Provides methods to determine the sunrise, sunset, civil twilight,
+ * nautical twilight, and astronomical twilight times of a given
  * location, or if it is currently day or night at a given location. <br>
  * Also provides methods to convert between Gregorian and Julian dates.<br>
  * The formulas used by this class are from the Wikipedia articles on Julian Day
