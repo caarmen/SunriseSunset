@@ -605,11 +605,6 @@ public class SunriseSunsetTest {
 
 		return inputDay;
 	}
-	private void validateSunriseSunset(Calendar[] actualSunriseSunset, String timeZoneString, String inputDayString,
-									   String expectedSunriseString, String expectedSunsetString) {
-		validateSunriseSunset(actualSunriseSunset, timeZoneString, inputDayString, expectedSunriseString, expectedSunsetString, DEFAULT_ACCURACY_MINUTES);
-
-	}
 
 	private void validateSunriseSunset(Calendar[] actualSunriseSunset, String timeZoneString, String inputDayString,
 									   String expectedSunriseString, String expectedSunsetString, double accuracyMinutes) {
@@ -675,7 +670,7 @@ public class SunriseSunsetTest {
 	 *            readable string for cal1, used in the error message if the
 	 *            Calendars are not equal
 	 * @param cal2
-	 *            Another date, compared zith cal1
+	 *            Another date, compared with cal1
 	 * @param calString2
 	 *            readable string for cal2, used in the error message if the
 	 *            Calendars are not equal

@@ -72,9 +72,8 @@ public class SunriseSunset {
 		int minute = gregorianDateUTC.get(Calendar.MINUTE);
 		int second = gregorianDateUTC.get(Calendar.SECOND);
 
-		double julianDate = julianDay + ((double) hour - 12) / 24
+		return julianDay + ((double) hour - 12) / 24
 				+ ((double) minute) / 1440 + ((double) second) / 86400;
-		return julianDate;
 	}
 
 	/**

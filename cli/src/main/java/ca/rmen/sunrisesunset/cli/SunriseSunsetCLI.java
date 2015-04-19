@@ -42,7 +42,7 @@ public class SunriseSunsetCLI {
 		String timeZoneString = args[i++];
 		String inputDayString = args[i++];
 		double latitude = Double.parseDouble(args[i++]);
-		double longitude = Double.parseDouble(args[i++]);
+		double longitude = Double.parseDouble(args[i]);
 
 		// Create a Calendar for the given date at noon.
 		TimeZone tz = TimeZone.getTimeZone(timeZoneString);
