@@ -45,7 +45,7 @@ Declare the dependency:
 </dependency>
 ```
 
-Just copy the file:
+Any other build system:
 -------------------
 Alternatively, you can just copy the single java file into your project:
 [library/src/main/java/ca/rmen/sunrisesunset/SunriseSunset.java](library/src/main/java/ca/rmen/sunrisesunset/SunriseSunset.java)
