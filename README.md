@@ -26,6 +26,16 @@ Declare the dependency:
 ```
 classpath 'ca.rmen:lib-sunrise-sunset:1.0.0'
 ```
+Maven:
+------
+```
+<dependency>
+ <groupId>ca.rmen</groupId>
+ <artifactId>lib-sunrise-sunset</artifactId>
+ <version>1.0.0</version>
+ <scope>compile</scope>
+</dependency>
+```
 
 Just copy the file:
 -------------------
