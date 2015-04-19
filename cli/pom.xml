@@ -68,6 +68,7 @@
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
 					<appendAssemblyId>false</appendAssemblyId>
+					<attach>false</attach>
 				</configuration>
 			</plugin>
 		</plugins>
