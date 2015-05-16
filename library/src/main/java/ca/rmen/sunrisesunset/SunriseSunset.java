@@ -360,6 +360,24 @@ public class SunriseSunset {
 	public static boolean isNight(double latitude, double longitude) {
 		Calendar today = Calendar.getInstance();
 		Calendar[] sunriseSunset = getSunriseSunset(today, latitude, longitude);
+		// In extreme latitudes, there may be no sunrise/sunset time in summer or
+		// winter, because it will be day or night 24 hours
+		if (sunriseSunset == null) {
+			int month = today.get(Calendar.MONTH); // Reminder: January = 0
+			if (latitude > 0) {
+				if (month >= 3 && month <= 10) {
+					return false; // Always day at the north pole in June
+				} else {
+					return true; // Always night at the north pole in December
+				}
+			} else {
+				if (month >= 3 && month <= 10) {
+					return true; // Always night at the south pole in June
+				} else {
+					return false; // Always day at the south pole in December
+				}
+			}
+		}
 		Calendar sunrise = sunriseSunset[0];
 		Calendar sunset = sunriseSunset[1];
 		Calendar now = Calendar.getInstance(TimeZone.getTimeZone("UTC"));

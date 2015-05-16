@@ -228,6 +228,7 @@ public class SunriseSunsetTest {
 		testCivilTwilight("Antarctica/McMurdo", "20151221", -77.8456, 166.6693, null, null);
 		testNauticalTwilight("Antarctica/McMurdo", "20151221", -77.8456, 166.6693, null, null);
 		testAstronomicalTwilight("Antarctica/McMurdo", "20151221", -77.8456, 166.6693, null, null);
+		testDayOrNight("Antarctica", "Antarctica/McMurdo", -77.8456, 166.6693, null, null, null, null);
 	}
 
 	/**
@@ -712,11 +713,18 @@ public class SunriseSunsetTest {
 
 		Calendar now = Calendar.getInstance(TimeZone
 				.getTimeZone(timeZoneString));
+		String nowString = format(DATE_FORMAT_MINUTES, now);
+
+		if (earliestSunriseString == null || latestSunriseString == null
+				|| earliestSunsetString == null || latestSunsetString == null) {
+			// For extreme latitudes around June/December, we'll just return here.  The previous lines at least make
+			// sure the library doesn't crash.
+			return;
+		}
 		Calendar earliestSunrise = getCalendarAtTime(now, earliestSunriseString);
 		Calendar latestSunrise = getCalendarAtTime(now, latestSunriseString);
 		Calendar earliestSunset = getCalendarAtTime(now, earliestSunsetString);
 		Calendar latestSunset = getCalendarAtTime(now, latestSunsetString);
-		String nowString = format(DATE_FORMAT_MINUTES, now);
 		if (isDay) {
 			Assert.assertTrue("In " + name + ", " + nowString
 					+ " is before sunrise at " + earliestSunriseString
