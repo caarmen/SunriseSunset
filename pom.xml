@@ -29,7 +29,9 @@
 	<packaging>pom</packaging>
 	<version>1.0.3</version>
 	<name>sunrise-sunset</name>
-	<url>http://rmen.ca</url>
+	<description>Provides methods to determine the sunrise, sunset, civil twilight,nautical twilight, and astronomical twilight times of a given location, or if it is currently day or night at a given location.</description>
+	<url>http://github.com/caarmen/SunriseSunset</url>
+	<inceptionYear>2013</inceptionYear>
 
 	<profiles>
 		<profile>
