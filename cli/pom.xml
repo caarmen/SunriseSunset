@@ -27,7 +27,7 @@
 	<parent>
 		<groupId>ca.rmen</groupId>
 		<artifactId>sunrise-sunset</artifactId>
-		<version>1.0.2</version>
+		<version>1.0.3</version>
 	</parent>
 
 	<artifactId>sunrise-sunset-cli</artifactId>

@@ -27,12 +27,12 @@
 	<parent>
 		<groupId>ca.rmen</groupId>
 		<artifactId>sunrise-sunset</artifactId>
-		<version>1.0.2</version>
+		<version>1.0.3</version>
 	</parent>
 
 	<artifactId>lib-sunrise-sunset</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.2</version>
+	<version>1.0.3</version>
 	<name>lib-sunrise-sunset</name>
 	<url>http://rmen.ca</url>
 
