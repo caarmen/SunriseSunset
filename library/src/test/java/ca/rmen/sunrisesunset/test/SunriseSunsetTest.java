@@ -229,6 +229,22 @@ public class SunriseSunsetTest {
 		testNauticalTwilight("Antarctica/McMurdo", "20151221", -77.8456, 166.6693, null, null);
 		testAstronomicalTwilight("Antarctica/McMurdo", "20151221", -77.8456, 166.6693, null, null);
 		testDayOrNight("Antarctica", "Antarctica/McMurdo", -77.8456, 166.6693, null, null, null, null);
+
+	}
+
+	@Test
+	public void testAtlanta() {
+		// Issue #16: Atlanta, Georgia:
+		// Compare to sunrisesunset.com:
+		testSunriseSunsetSeconds("US/Eastern", "20090906", 33.766667, -84.416667, "07:15:00 EDT", "19:58:00 EDT", DEFAULT_ACCURACY_MINUTES);
+
+		// Compare to Pyephem (07:14:57, 19:56:10)
+		testSunriseSunsetSeconds("US/Eastern", "20090906", 33.766667, -84.416667, "07:14:57 EDT", "19:56:10 EDT", DEFAULT_ACCURACY_MINUTES);
+
+		// Compare to USNO (07:15:00, 23:56:00)
+		// This one is off by 2 seconds over our accuracy threshold: it's off by 137000 ms (2.2833 minutes) instead of 135000 ms (2.25 minutes).
+		// But since it doesn't seem to have seconds, this may be due to rounding done by USNO.
+		testSunriseSunsetSeconds("US/Eastern", "20090906", 33.766667, -84.416667, "07:15:00 EDT", "19:56:00 EDT", DEFAULT_ACCURACY_MINUTES + 0.034);
 	}
 
 	@Test
@@ -560,6 +576,31 @@ public class SunriseSunsetTest {
 		validateSunriseSunset(actualSunriseSunset, timeZoneString, inputDayString, expectedSunriseString, expectedSunsetString, accuracyMinutes);
 	}
 
+	/**
+	 * Like {@link #testSunriseSunset()}, but the expected sunrise and sunset strings contain seconds.
+	 * @param expectedSunriseString the time the sunrise is expected, in the format HH:mm:ss z.
+	 * @param expectedSunsetString  the time the sunset is expected, in the format HH:mm:ss z.
+	 *
+	 * @see {@link #testSunriseSunset()}
+	 */
+	private void testSunriseSunsetSeconds(String timeZoneString,
+								   String inputDayString, double inputLatitude, double inputLongitude,
+								   String expectedSunriseString, String expectedSunsetString, double accuracyMinutes) {
+		Calendar inputDay = parseDate(timeZoneString, inputDayString);
+
+		// Calculate the actual sunrise and sunset times.
+		Calendar[] actualSunriseSunset = SunriseSunset.getSunriseSunset(
+				inputDay, inputLatitude, inputLongitude);
+
+		Calendar[] actualSunriseSunsetWithAltitude = SunriseSunset.getSunriseSunset(
+				inputDay, inputLatitude, inputLongitude, SunriseSunset.SUN_ALTITUDE_SUNRISE_SUNSET);
+
+		Assert.assertArrayEquals(actualSunriseSunset, actualSunriseSunsetWithAltitude);
+
+		// Compare the calculated times with the expected ones.
+		validateSunriseSunsetSeconds(actualSunriseSunset, timeZoneString, inputDayString, expectedSunriseString, expectedSunsetString, accuracyMinutes);
+	}
+
 	private Calendar parseDate(String timeZoneString, String inputDayString) {
 		TimeZone tz = TimeZone.getTimeZone(timeZoneString);
 
@@ -591,6 +632,40 @@ public class SunriseSunsetTest {
 		Calendar expectedSunrise = parseDate(tz, DATE_FORMAT_MINUTES,
 				inputDayString + " " + expectedSunriseString);
 		Calendar expectedSunset = parseDate(tz, DATE_FORMAT_MINUTES,
+				inputDayString + " " + expectedSunsetString);
+
+		// Compare the actual and expected sunrise/sunset times. Allow a margin
+		// of error.
+		assertEqualsOrAlmostEquals(expectedSunrise, expectedSunriseString,
+				actualSunrise, actualSunriseString, (int) (accuracyMinutes * 60000));
+		assertEqualsOrAlmostEquals(expectedSunset, expectedSunsetString,
+				actualSunset, actualSunsetString, (int) (accuracyMinutes * 60000));
+
+	}
+
+	/**
+	 * Like {@link #validateSunriseSunset(Calendar[], String, String, String, String, double)} but the expected time strings are in seconds.
+	 * @param expectedSunriseString the time the sunrise is expected, in the format HH:mm:ss z.
+	 * @param expectedSunsetString the time the sunset is expected, in the format HH:mm:ss z.
+     */
+	private void validateSunriseSunsetSeconds(Calendar[] actualSunriseSunset, String timeZoneString, String inputDayString,
+									   String expectedSunriseString, String expectedSunsetString, double accuracyMinutes) {
+
+		if (expectedSunriseString == null || expectedSunsetString == null) {
+			Assert.assertNull(actualSunriseSunset);
+			return;
+		}
+
+		Calendar actualSunrise = actualSunriseSunset[0];
+		Calendar actualSunset = actualSunriseSunset[1];
+
+		String actualSunriseString = format(DATE_FORMAT_SECONDS, actualSunrise);
+		String actualSunsetString = format(DATE_FORMAT_SECONDS, actualSunset);
+
+		TimeZone tz = TimeZone.getTimeZone(timeZoneString);
+		Calendar expectedSunrise = parseDate(tz, DATE_FORMAT_SECONDS,
+				inputDayString + " " + expectedSunriseString);
+		Calendar expectedSunset = parseDate(tz, DATE_FORMAT_SECONDS,
 				inputDayString + " " + expectedSunsetString);
 
 		// Compare the actual and expected sunrise/sunset times. Allow a margin
