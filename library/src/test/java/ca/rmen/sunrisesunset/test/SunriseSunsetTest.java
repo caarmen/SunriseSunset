@@ -231,6 +231,11 @@ public class SunriseSunsetTest {
 		testDayOrNight("Antarctica", "Antarctica/McMurdo", -77.8456, 166.6693, null, null, null, null);
 	}
 
+	@Test
+	public void testAlertNunavutCanada() {
+		testAstronomicalTwilight("UTC-5", "20160228", 82.50177764892578, -62.34809112548828, null, null);
+	}
+
 	/**
 	 * Test the time of sunrise and sunset for some locations.
 	 */
