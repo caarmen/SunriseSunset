@@ -1,6 +1,6 @@
 /*
  * Sunrise Sunset Calculator.
- * Copyright (C) 2013-2015 Carmen Alvarez
+ * Copyright (C) 2013-2016 Carmen Alvarez
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -202,8 +202,7 @@ public class SunriseSunset {
 	 * @param latitude  the latitude of the location in degrees.
 	 * @param longitude the longitude of the location in degrees (West is negative)
 	 * @return a two-element Gregorian Calendar array. The first element is the
-	 * end of civil twilight, the second element is the beginning of civil
-	 * twilight.
+	 * civil twilight dawn, the second element is the civil twilight dusk.
 	 * This will return null if there is no civil twilight. (Ex: no twilight in Antarctica in December)
 	 */
 	public static Calendar[] getCivilTwilight(final Calendar day,
@@ -218,8 +217,7 @@ public class SunriseSunset {
 	 * @param latitude  the latitude of the location in degrees.
 	 * @param longitude the longitude of the location in degrees (West is negative)
 	 * @return a two-element Gregorian Calendar array. The first element is the
-	 * end of nautical twilight, the second element is the beginning of
-	 * nautical twilight.
+	 * nautical twilight dawn, the second element is the nautical twilight dusk.
 	 * This will return null if there is no nautical twilight. (Ex: no twilight in Antarctica in December)
 	 */
 	public static Calendar[] getNauticalTwilight(final Calendar day,
@@ -234,8 +232,7 @@ public class SunriseSunset {
 	 * @param latitude  the latitude of the location in degrees.
 	 * @param longitude the longitude of the location in degrees (West is negative)
 	 * @return a two-element Gregorian Calendar array. The first element is the
-	 * end of astronomical twilight, the second element is the beginning of
-	 * astronomical twilight.
+	 * astronomical twilight dawn, the second element is the  astronomical twilight dusk.
 	 * This will return null if there is no astronomical twilight. (Ex: no twilight in Antarctica in December)
 	 */
 	public static Calendar[] getAstronomicalTwilight(final Calendar day,
