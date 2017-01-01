@@ -24,7 +24,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ca.rmen</groupId>
 	<artifactId>lib-sunrise-sunset</artifactId>
-	<version>1.0.3</version>
+	<version>1.1.0</version>
 	<packaging>jar</packaging>
 
 	<name>sunrise-sunset</name>
