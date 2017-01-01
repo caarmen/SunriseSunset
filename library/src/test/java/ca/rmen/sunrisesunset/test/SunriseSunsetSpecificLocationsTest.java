@@ -85,9 +85,9 @@ public class SunriseSunsetSpecificLocationsTest {
         SunriseSunsetTwilightTestUtils.testAstronomicalTwilight("Antarctica/McMurdo", "20151221", -77.8456, 166.6693, null, null);
         SunriseSunsetTestUtils.testDayOrNight("Antarctica", "Antarctica/McMurdo", -77.8456, 166.6693, null, null, null, null);
         SunriseSunsetTestUtils.testSolarNoon("Antarctica/McMurdo", "20151221", -77.8456, 166.6693, null);
-        SunriseSunsetTwilightTestUtils.testIsCivilTwilight("Antarctica/McMurdo", "20150621 12:00", -77.8456, 166.6693, false);
-        SunriseSunsetTwilightTestUtils.testIsNauticalTwilight("Antarctica/McMurdo", "20150621 12:00", -77.8456, 166.6693, false);
-        SunriseSunsetTwilightTestUtils.testIsAstronomicalTwilight("Antarctica/McMurdo", "20150621 12:00", -77.8456, 166.6693, false);
+        SunriseSunsetTwilightTestUtils.testIsCivilTwilight("Antarctica/McMurdo", "20151221 12:00", -77.8456, 166.6693, false);
+        SunriseSunsetTwilightTestUtils.testIsNauticalTwilight("Antarctica/McMurdo", "20151221 12:00", -77.8456, 166.6693, false);
+        SunriseSunsetTwilightTestUtils.testIsAstronomicalTwilight("Antarctica/McMurdo", "20151221 12:00", -77.8456, 166.6693, false);
         SunriseSunsetTestUtils.testGetDayPeriod("Antarctica/McMurdo", "20151221 04:05", -77.8456, 166.6693, SunriseSunset.DayPeriod.DAY);
         SunriseSunsetTestUtils.testGetDayPeriod("Antarctica/McMurdo", "20151221 12:00", -77.8456, 166.6693, SunriseSunset.DayPeriod.DAY);
         SunriseSunsetTestUtils.testGetDayPeriod("Antarctica/McMurdo", "20151221 18:00", -77.8456, 166.6693, SunriseSunset.DayPeriod.DAY);
