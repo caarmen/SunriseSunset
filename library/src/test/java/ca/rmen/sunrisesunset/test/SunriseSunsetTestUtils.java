@@ -206,6 +206,14 @@ class SunriseSunsetTestUtils {
         validateSolarNoon(actualSolarNoon, timeZoneString, inputDayString, expectedNoonString);
     }
 
+    static void testDayLength(String timeZoneString,
+                              String inputDayString, double inputLatitude, double inputLongitude,
+                              long expectedDayLength) {
+
+        Calendar inputDay = parseDate(timeZoneString, inputDayString);
+        Assert.assertEquals(expectedDayLength, SunriseSunset.getDayLength(inputDay, inputLatitude, inputLongitude));
+    }
+
     static Calendar parseDate(String timeZoneString, String inputDayString) {
         TimeZone tz = TimeZone.getTimeZone(timeZoneString);
 

@@ -21,6 +21,7 @@
 package ca.rmen.sunrisesunset.test;
 
 import ca.rmen.sunrisesunset.SunriseSunset;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -59,6 +60,7 @@ public class SunriseSunsetSpecificLocationsTest {
         SunriseSunsetTestUtils.testGetDayPeriod("Antarctica/McMurdo", "20150621 11:35", -77.8456, 166.6693, SunriseSunset.DayPeriod.NIGHT);
         SunriseSunsetTestUtils.testGetDayPeriod("Antarctica/McMurdo", "20150621 13:35", -77.8456, 166.6693, SunriseSunset.DayPeriod.NIGHT);
         SunriseSunsetTestUtils.testGetDayPeriod("Antarctica/McMurdo", "20150621 15:35", -77.8456, 166.6693, SunriseSunset.DayPeriod.ASTRONOMICAL_TWILIGHT);
+        SunriseSunsetTestUtils.testDayLength("Antarctica/McMurdo", "20150621", -77.8456, 166.6693, 0);
 
         SunriseSunsetTestUtils.testSunriseSunset("Antarctica/McMurdo", "20150921", -77.8456, 166.6693, "06:48", "18:46", accuracyMinutes);
         SunriseSunsetTwilightTestUtils.testCivilTwilight("Antarctica/McMurdo", "20150921", -77.8456, 166.6693, "5:07", "20:27", accuracyMinutes);
@@ -92,6 +94,7 @@ public class SunriseSunsetSpecificLocationsTest {
         SunriseSunsetTestUtils.testGetDayPeriod("Antarctica/McMurdo", "20151221 12:00", -77.8456, 166.6693, SunriseSunset.DayPeriod.DAY);
         SunriseSunsetTestUtils.testGetDayPeriod("Antarctica/McMurdo", "20151221 18:00", -77.8456, 166.6693, SunriseSunset.DayPeriod.DAY);
         SunriseSunsetTestUtils.testGetDayPeriod("Antarctica/McMurdo", "20151221 23:00", -77.8456, 166.6693, SunriseSunset.DayPeriod.DAY);
+        SunriseSunsetTestUtils.testDayLength("Antarctica/McMurdo", "20151221", -77.8456, 166.6693, 86400);
 
     }
 

@@ -59,6 +59,8 @@ class SunriseSunsetCLI {
 		printCalendar(tz, now);
 
 		System.out.println("Current day period is " + SunriseSunset.getDayPeriod(now, latitude, longitude));
+		long dayLength = SunriseSunset.getDayLength(now, latitude, longitude);
+		System.out.println("Day is " + dayLength + " seconds long");
 
 		System.out.println("Lookup for date:");
 		printCalendar(tz, day);
