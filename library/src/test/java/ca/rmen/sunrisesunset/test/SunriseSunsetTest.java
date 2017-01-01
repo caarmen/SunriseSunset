@@ -212,23 +212,27 @@ public class SunriseSunsetTest {
 		testCivilTwilight("Antarctica/McMurdo", "20150419", -77.8456, 166.6693, "08:26", "17:19", accuracyMinutes);
 		testNauticalTwilight("Antarctica/McMurdo", "20150419", -77.8456, 166.6693, "06:29", "19:17", accuracyMinutes);
 		testAstronomicalTwilight("Antarctica/McMurdo", "20150419", -77.8456, 166.6693, "04:27", "21:18", accuracyMinutes);
+		testSolarNoon("Antarctica/McMurdo", "20150419", -77.8456, 166.6693, "12:53");
 
 		testSunriseSunset("Antarctica/McMurdo", "20150621", -77.8456, 166.6693, null, null);
 		testCivilTwilight("Antarctica/McMurdo", "20150621", -77.8456, 166.6693, null, null);
 		testNauticalTwilight("Antarctica/McMurdo", "20150621", -77.8456, 166.6693, "11:33", "14:17", accuracyMinutes);
 		testAstronomicalTwilight("Antarctica/McMurdo", "20150621", -77.8456, 166.6693, "08:32", "17:17", accuracyMinutes);
+		testSolarNoon("Antarctica/McMurdo", "20150621", -77.8456, 166.6693, null);
 
 		testSunriseSunset("Antarctica/McMurdo", "20150921", -77.8456, 166.6693, "06:48", "18:46", accuracyMinutes);
 		testCivilTwilight("Antarctica/McMurdo", "20150921", -77.8456, 166.6693, "5:07", "20:27", accuracyMinutes);
 		// Not sure why this one is off more... 2:23 vs 2:28
 		testNauticalTwilight("Antarctica/McMurdo", "20150921", -77.8456, 166.6693, "02:23", "23:11", 5.1);
 		testAstronomicalTwilight("Antarctica/McMurdo", "20150921", -77.8456, 166.6693, null, null);
+		testSolarNoon("Antarctica/McMurdo", "20150921", -77.8456, 166.6693, "12:47");
 
 		testSunriseSunset("Antarctica/McMurdo", "20151221", -77.8456, 166.6693, null, null);
 		testCivilTwilight("Antarctica/McMurdo", "20151221", -77.8456, 166.6693, null, null);
 		testNauticalTwilight("Antarctica/McMurdo", "20151221", -77.8456, 166.6693, null, null);
 		testAstronomicalTwilight("Antarctica/McMurdo", "20151221", -77.8456, 166.6693, null, null);
 		testDayOrNight("Antarctica", "Antarctica/McMurdo", -77.8456, 166.6693, null, null, null, null);
+		testSolarNoon("Antarctica/McMurdo", "20151221", -77.8456, 166.6693, null);
 
 	}
 
@@ -237,6 +241,7 @@ public class SunriseSunsetTest {
 		// Issue #16: Atlanta, Georgia:
 		// Compare to sunrisesunset.com:
 		testSunriseSunsetSeconds("US/Eastern", "20090906", 33.766667, -84.416667, "07:15:00 EDT", "19:58:00 EDT", DEFAULT_ACCURACY_MINUTES);
+		testSolarNoon("US/Eastern", "20090906", 33.766667, -84.416667, "13:36");
 
 		// Compare to Pyephem (07:14:57, 19:56:10)
 		testSunriseSunsetSeconds("US/Eastern", "20090906", 33.766667, -84.416667, "07:14:57 EDT", "19:56:10 EDT", DEFAULT_ACCURACY_MINUTES);
@@ -285,6 +290,29 @@ public class SunriseSunsetTest {
 		// The following test will not work on Java versions older than 2009.
 		testSunriseSunset("America/Argentina/Buenos_Aires", "20131031",
 				-34.6092, -58.3732, "05:53", "19:21");
+	}
+
+	/**
+	 * Test the time of solar noon for some locations
+	 */
+	@Test
+	public void testSolarNoon() {
+		testSolarNoon("PST", "20130120", 34.0522, -118.2437, "12:04");
+		testSolarNoon("CET", "20130120", 48.8567, 2.351, "13:02");
+		testSolarNoon("Australia/Sydney", "20121225", -33.86, 151.2111, "12:55");
+		testSolarNoon("Japan", "20130501", 35.6938, 139.7036, "11:38");
+		testSolarNoon("Europe/Dublin", "20130605", 53.3441, -6.2675, "13:24");
+		testSolarNoon("CST", "20130622", 41.8781, -87.6298, "12:52");
+		testSolarNoon("Pacific/Honolulu", "20150827", 21.3069, -157.8583, "12:33");
+		testSolarNoon("America/Argentina/Buenos_Aires", "20130501", -34.6092, -58.3732, "12:51");
+		testSolarNoon("America/Argentina/Buenos_Aires", "20131019", -34.6092, -58.3732, "12:39");
+
+		// The following test will not work on Java versions older than 2009.
+		testSolarNoon("America/Argentina/Buenos_Aires", "20130126", -34.6092, -58.3732, "13:06");
+		// The following test will not work on Java versions older than 2009.
+		testSolarNoon("America/Argentina/Buenos_Aires", "20131020", -34.6092, -58.3732, "12:38");
+		// The following test will not work on Java versions older than 2009.
+		testSolarNoon("America/Argentina/Buenos_Aires", "20131031", -34.6092, -58.3732, "12:37");
 	}
 
 	/**
@@ -601,6 +629,28 @@ public class SunriseSunsetTest {
 		validateSunriseSunsetSeconds(actualSunriseSunset, timeZoneString, inputDayString, expectedSunriseString, expectedSunsetString, accuracyMinutes);
 	}
 
+	/**
+	 * @param timeZoneString        a valid Java timezone
+	 * @param inputDayString        a day in the format {@link #DATE_FORMAT_DAY}
+	 * @param inputLatitude         the latitude of a given location
+	 * @param inputLongitude        the longitude of a given location (West is negative).
+	 * @param expectedNoonString    the time the noon is expected, in the format HH:mm. The
+	 *                              time should be in the timezone of the parameter
+	 *                              timeZoneString.
+	 */
+	private void testSolarNoon(String timeZoneString,
+								   String inputDayString, double inputLatitude, double inputLongitude,
+								   String expectedNoonString) {
+
+		Calendar inputDay = parseDate(timeZoneString, inputDayString);
+
+		// Calculate the actual solar noon
+		Calendar actualSolarNoon = SunriseSunset.getSolarNoon(inputDay, inputLatitude, inputLongitude);
+
+		// Compare the calculated times with the expected ones.
+		validateSolarNoon(actualSolarNoon, timeZoneString, inputDayString, expectedNoonString);
+	}
+
 	private Calendar parseDate(String timeZoneString, String inputDayString) {
 		TimeZone tz = TimeZone.getTimeZone(timeZoneString);
 
@@ -675,6 +725,30 @@ public class SunriseSunsetTest {
 		assertEqualsOrAlmostEquals(expectedSunset, expectedSunsetString,
 				actualSunset, actualSunsetString, (int) (accuracyMinutes * 60000));
 
+	}
+
+	private void validateSolarNoon(Calendar actualSolarNoon, String timeZoneString, String inputDayString,
+									   String expectedSolarNoonString) {
+
+		if (expectedSolarNoonString == null) {
+			if (actualSolarNoon != null) {
+				Assert.fail("Expected no value for solar noon for " + timeZoneString + " " + inputDayString + ", but got " + actualSolarNoon.getTime());
+			}
+			return;
+		}
+
+		Assert.assertNotNull("Expected a value for solar noon for " + timeZoneString + " " + inputDayString, actualSolarNoon);
+
+		String actualSolarNoonString = format(DATE_FORMAT_MINUTES, actualSolarNoon);
+
+		TimeZone tz = TimeZone.getTimeZone(timeZoneString);
+		Calendar expectedSolarNoon = parseDate(tz, DATE_FORMAT_MINUTES,
+				inputDayString + " " + expectedSolarNoonString);
+
+		// Compare the actual and expected solar noon times. Allow a margin
+		// of error.
+		assertEqualsOrAlmostEquals(expectedSolarNoon, expectedSolarNoonString,
+				actualSolarNoon, actualSolarNoonString, (int) (DEFAULT_ACCURACY_MINUTES * 60000));
 	}
 
 	private Calendar parseDate(TimeZone tz, SimpleDateFormat format,

@@ -59,6 +59,26 @@ public class SunriseSunset {
 	private static final double CONST_0009 = 0.0009;
 	private static final double CONST_360 = 360;
 
+	/**
+	 * Intermediate variables used in the sunrise equation
+	 * @see <a href="http://en.wikipedia.org/wiki/Sunrise_equation">Sunrise equation on Wikipedia</a>
+	 */
+	private static class SolarEquationVariables {
+		final double n;// Julian cycle (number of days since 2000-01-01).
+		final double m; // solar mean anomaly
+		final double lambda; // ecliptic longitude
+		final double jtransit; // Solar transit (hour angle for solar noon)
+		final double delta; // Declination of the sun
+
+		private SolarEquationVariables(double n, double m, double lambda, double jtransit, double delta) {
+			this.n = n;
+			this.m = m;
+			this.lambda = lambda;
+			this.jtransit = jtransit;
+			this.delta = delta;
+		}
+	}
+
 	private SunriseSunset() {
 		// Prevent instantiation of this utility class
 	}
@@ -257,21 +277,14 @@ public class SunriseSunset {
 	}
 
 	/**
-	 * Calculate the sunrise and sunset times for the given date, given
-	 * location, and sun altitude.
-	 * This is based on the Wikipedia article on the Sunrise equation.
+	 * Return intermediate variables used for calculating sunrise, sunset, and solar noon.
 	 *
-	 * @param day         The day for which to calculate sunrise and sunset
-	 * @param latitude    the latitude of the location in degrees.
+	 * @param day         The day for which to calculate the ecliptic longitude and jtransit
 	 * @param longitude   the longitude of the location in degrees (West is negative)
-	 * @param sunAltitude <a href="http://en.wikipedia.org/wiki/Solar_zenith_angle#Solar_elevation_angle">the angle between the horizon and the center of the sun's disc.</a>
-	 * @return a two-element Gregorian Calendar array. The first element is the
-	 * sunrise, the second element is the sunset. This will return null if there is no sunrise or sunset. (Ex: no sunrise in Antarctica in June)
+     * @return a 2-element array with the ecliptic longitude (lambda) as the first element, and solar transit (jtransit) as the second element
 	 * @see <a href="http://en.wikipedia.org/wiki/Sunrise_equation">Sunrise equation on Wikipedia</a>
-	 */
-	public static Calendar[] getSunriseSunset(final Calendar day,
-											  final double latitude, double longitude, double sunAltitude) {
-		final double latitudeRad = Math.toRadians(latitude);
+     */
+	private static SolarEquationVariables getSolarEquationVariables(final Calendar day, double longitude) {
 
 		longitude = -longitude;
 
@@ -307,10 +320,35 @@ public class SunriseSunset {
 		final double delta = Math.asin(Math.sin(lambda)
 				* Math.sin(Math.toRadians(23.439)));
 
+
+		return new SolarEquationVariables(n, m, lambda, jtransit, delta);
+	}
+
+	/**
+	 * Calculate the sunrise and sunset times for the given date, given
+	 * location, and sun altitude.
+	 * This is based on the Wikipedia article on the Sunrise equation.
+	 *
+	 * @param day         The day for which to calculate sunrise and sunset
+	 * @param latitude    the latitude of the location in degrees.
+	 * @param longitude   the longitude of the location in degrees (West is negative)
+	 * @param sunAltitude <a href="http://en.wikipedia.org/wiki/Solar_zenith_angle#Solar_elevation_angle">the angle between the horizon and the center of the sun's disc.</a>
+	 * @return a two-element Gregorian Calendar array. The first element is the
+	 * sunrise, the second element is the sunset. This will return null if there is no sunrise or sunset. (Ex: no sunrise in Antarctica in June)
+	 * @see <a href="http://en.wikipedia.org/wiki/Sunrise_equation">Sunrise equation on Wikipedia</a>
+	 */
+	public static Calendar[] getSunriseSunset(final Calendar day,
+											  final double latitude, double longitude, double sunAltitude) {
+
+		final SolarEquationVariables solarEquationVariables = getSolarEquationVariables(day, longitude);
+
+		longitude = -longitude;
+		final double latitudeRad = Math.toRadians(latitude);
+
 		// Hour angle
 		final double omega = Math.acos((Math.sin(Math.toRadians(sunAltitude)) - Math
-				.sin(latitudeRad) * Math.sin(delta))
-				/ (Math.cos(latitudeRad) * Math.cos(delta)));
+				.sin(latitudeRad) * Math.sin(solarEquationVariables.delta))
+				/ (Math.cos(latitudeRad) * Math.cos(solarEquationVariables.delta)));
 
 		if (Double.isNaN(omega)) {
 			return null;
@@ -319,11 +357,11 @@ public class SunriseSunset {
 		// Sunset
 		final double jset = JULIAN_DATE_2000_01_01
 				+ CONST_0009
-				+ ((Math.toDegrees(omega) + longitude) / CONST_360 + n + 0.0053
-				* Math.sin(m) - 0.0069 * Math.sin(2 * lambda));
+				+ ((Math.toDegrees(omega) + longitude) / CONST_360 + solarEquationVariables.n + 0.0053
+				* Math.sin(solarEquationVariables.m) - 0.0069 * Math.sin(2 * solarEquationVariables.lambda));
 
 		// Sunrise
-		final double jrise = jtransit - (jset - jtransit);
+		final double jrise = solarEquationVariables.jtransit - (jset - solarEquationVariables.jtransit);
 		// Convert sunset and sunrise to Gregorian dates, in UTC
 		final Calendar gregRiseUTC = getGregorianDate(jrise);
 		final Calendar gregSetUTC = getGregorianDate(jset);
@@ -334,6 +372,41 @@ public class SunriseSunset {
 		final Calendar gregSet = Calendar.getInstance(day.getTimeZone());
 		gregSet.setTimeInMillis(gregSetUTC.getTimeInMillis());
 		return new Calendar[]{gregRise, gregSet};
+	}
+
+	/**
+	 * Calculate the solar noon time for the given date and given location.
+	 * This is based on the Wikipedia article on the Sunrise equation.
+	 *
+	 * @param day         The day for which to calculate sunrise and sunset
+	 * @param latitude  the latitude of the location in degrees.
+	 * @param longitude   the longitude of the location in degrees (West is negative)
+	 * @return            a Calendar with the time set to solar noon for the given day.
+	 * @see <a href="http://en.wikipedia.org/wiki/Sunrise_equation">Sunrise equation on Wikipedia</a>
+	 */
+	public static Calendar getSolarNoon(final Calendar day, final double latitude, double longitude) {
+		SolarEquationVariables solarEquationVariables = getSolarEquationVariables(day, longitude);
+
+		// Add a check for Antarctica in June and December (sun always down or up, respectively).
+		// In this case, jtransit will be filled in, but we need to check the hour angle omega for
+		// sunrise.
+		// If there's no sunrise (omega is NaN), there's no solar noon.
+		final double latitudeRad = Math.toRadians(latitude);
+
+		// Hour angle
+		final double omega = Math.acos((Math.sin(Math.toRadians(SUN_ALTITUDE_SUNRISE_SUNSET)) - Math
+				.sin(latitudeRad) * Math.sin(solarEquationVariables.delta))
+				/ (Math.cos(latitudeRad) * Math.cos(solarEquationVariables.delta)));
+
+		if (Double.isNaN(omega)) {
+			return null;
+		}
+
+		// Convert jtransit Gregorian dates, in UTC
+		final Calendar gregNoonUTC = getGregorianDate(solarEquationVariables.jtransit);
+		final Calendar gregNoon = Calendar.getInstance(day.getTimeZone());
+		gregNoon.setTimeInMillis(gregNoonUTC.getTimeInMillis());
+		return gregNoon;
 	}
 
 	/**
