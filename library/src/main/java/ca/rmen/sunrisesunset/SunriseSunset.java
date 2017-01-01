@@ -507,6 +507,7 @@ public class SunriseSunset {
 	 * This returns true if the current time at the location is between sunset and civil twilight dusk
 	 * or between civil twilight dawn and sunrise.
 	 */
+	@SuppressWarnings("unused")
 	public static boolean isCivilTwilight(double latitude, double longitude) {
 		Calendar today = Calendar.getInstance();
 		return isCivilTwilight(today, latitude, longitude);
@@ -536,6 +537,7 @@ public class SunriseSunset {
 	 * This returns true if the current time at the location is between civil and nautical twilight dusk
 	 * or between nautical and civil twilight dawn.
 	 */
+	@SuppressWarnings("unused")
 	public static boolean isNauticalTwilight(double latitude, double longitude) {
 		Calendar today = Calendar.getInstance();
 		return isNauticalTwilight(today, latitude, longitude);
@@ -565,6 +567,7 @@ public class SunriseSunset {
 	 * This returns true if the current time at the location is between nautical and astronomical twilight dusk
 	 * or between astronomical and nautical twilight dawn.
 	 */
+	@SuppressWarnings("unused")
 	public static boolean isAstronomicalTwilight(double latitude, double longitude) {
 		Calendar today = Calendar.getInstance();
 		return isAstronomicalTwilight(today, latitude, longitude);
@@ -592,6 +595,7 @@ public class SunriseSunset {
 	 * @param longitude the longitude of the location in degrees (West is negative)
 	 * @return true if it is civil, nautical, or astronomical twilight currently at the given location.
 	 */
+	@SuppressWarnings("unused")
 	public static boolean isTwilight(double latitude, double longitude) {
 		Calendar today = Calendar.getInstance();
 		return isTwilight(today, latitude, longitude);
