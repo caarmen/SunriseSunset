@@ -254,7 +254,57 @@ public class SunriseSunsetTest {
 
 	@Test
 	public void testAlertNunavutCanada() {
-		testAstronomicalTwilight("UTC-5", "20160228", 82.50177764892578, -62.34809112548828, null, null);
+		// Wildly different results for Alert, Nunavut, Canada, between multiple sources, for
+		// sunrise/sunset, civil twilight and nautical twilight.
+		// Astronomical twilight and solar noon is consistent where available.
+
+		// The different sources, ranked by how close the results match this library are:
+		// suncalc.net (closest)
+		// suncalc.org
+		// timeanddate.com
+		// esrl.noaa.gov
+		// nrc-cnrc.gc.ca
+		// sunrisesunset.com (biggest difference)
+
+		// http://www.suncalc.org/#/82.5018,-62.3481,11/2016.02.28/12:35/1
+		double accuracyMinutesSunCalcDotOrg = 1.1; // this is better than our default accuracy acceptance!
+		testSunriseSunset("EST", "20160228", 82.50178, -62.34809, "10:27", "12:19", accuracyMinutesSunCalcDotOrg);
+		testCivilTwilight("EST", "20160228", 82.50178, -62.34809, "06:27", "16:19", accuracyMinutesSunCalcDotOrg);
+		testSolarNoon("EST", "20160228", 82.501778, -62.34809, "11:23");
+
+		// http://suncalc.net/#/82.5018,-62.3481,0/2016.02.28/12:22
+		double accuracyMinutesSunCalcDotNet = 1.1; // this is better than our default accuracy acceptance!
+		testSunriseSunset("EST", "20160228", 82.5018, -62.3481, "10:27", "12:19", accuracyMinutesSunCalcDotNet);
+		testCivilTwilight("EST", "20160228", 82.5018, -62.3481, "06:27", "16:19", accuracyMinutesSunCalcDotNet);
+		testNauticalTwilight("EST", "20160228", 82.5018, -62.3481, "03:16", "19:30", accuracyMinutesSunCalcDotNet);
+
+		// https://www.timeanddate.com/sun/canada/alert?month=2&year=2016:
+		double accuracyMinutesTimeAndDateDotCom = 11.1;
+		testSunriseSunset("EST", "20160228", 82.50177764892578, -62.34809112548828, "10:17", "12:31", accuracyMinutesTimeAndDateDotCom);
+		testCivilTwilight("EST", "20160228", 82.50177764892578, -62.34809112548828, "06:25", "16:24", accuracyMinutesTimeAndDateDotCom);
+		testNauticalTwilight("EST", "20160228", 82.50177764892578, -62.34809112548828, "03:15", "19:38", accuracyMinutesTimeAndDateDotCom);
+		testAstronomicalTwilight("EST", "20160228", 82.50177764892578, -62.34809112548828, null, null);
+		testSolarNoon("EST", "20160228", 82.50177764892578, -62.34809112548828, "11:22");
+
+		// https://www.esrl.noaa.gov/gmd/grad/solcalc/sunrise.html
+		double accuracyMinutesNoaaDotGov = 12.1;
+		testSunriseSunset("EST", "20160228", 82.501667, -62.348056, "10:15", "12:32", accuracyMinutesNoaaDotGov);
+		testSolarNoon("EST", "20160228", 82.501667, -62.348056, "11:22");
+
+		// http://app.hia-iha.nrc-cnrc.gc.ca/cgi-bin/sun-soleil.pl
+		double accuracyMinutesNrc = 12.9;
+		testSunriseSunset("EST", "20160228", 82.5, -62.35, "10:14", "12:33", accuracyMinutesNrc);
+		testCivilTwilight("EST", "20160228", 82.5, -62.35, "06:24", "16:24", accuracyMinutesNrc);
+		testNauticalTwilight("EST", "20160228", 82.5, -62.35, "03:15", "19:38", accuracyMinutesNrc);
+		testSolarNoon("EST", "20160228", 82.501778, -62.35, "11:22");
+
+		// http://sunrisesunset.com/calendar.asp?comb_city_info=test;62.34809;82.50178;-5;1&month=2&year=2016&time_type=0&back=&want_twi_civ=1&want_twi_naut=1&want_twi_astro=1&want_info=1&want_solar_noon=1&wadj=1
+		double accuracyMinutesSunriseSunsetDotCom = 26.0;
+		testSunriseSunset("EST", "20160228", 82.50177764892578, -62.34809112548828, "10:50", "11:54", accuracyMinutesSunriseSunsetDotCom);
+		testCivilTwilight("EST", "20160228", 82.50177764892578, -62.34809112548828, "06:30", "16:14", accuracyMinutesSunriseSunsetDotCom);
+		testNauticalTwilight("EST", "20160228", 82.50177764892578, -62.34809112548828, "03:20", "19:24", accuracyMinutesSunriseSunsetDotCom);
+		testAstronomicalTwilight("EST", "20160228", 82.50177764892578, -62.34809112548828, null, null);
+		testSolarNoon("EST", "20160228", 82.50177764892578, -62.34809112548828, "11:22");
 	}
 
 	/**
