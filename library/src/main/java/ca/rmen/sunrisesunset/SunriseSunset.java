@@ -18,6 +18,7 @@
  */
 package ca.rmen.sunrisesunset;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -417,23 +418,67 @@ public class SunriseSunset {
 	 * before the sunset for that location.
 	 */
 	public static boolean isDay(double latitude, double longitude) {
-		return !isNight(latitude, longitude);
+		Calendar now = Calendar.getInstance();
+		return isDay(now, latitude, longitude);
+	}
+
+	/**
+	 * @param calendar  a datetime
+	 * @param latitude  the latitude of the location in degrees.
+	 * @param longitude the longitude of the location in degrees (West is negative)
+	 * @return true if it is day at the given location and given datetime. This returns
+	 * true if the given datetime at the location is after the sunrise and
+	 * before the sunset for that location.
+	 */
+	public static boolean isDay(Calendar calendar, double latitude, double longitude) {
+		Calendar[] sunriseSunset = getSunriseSunset(calendar, latitude, longitude);
+		// In extreme latitudes, there may be no sunrise/sunset time in summer or
+		// winter, because it will be day or night 24 hours
+		if (sunriseSunset == null) {
+			int month = calendar.get(Calendar.MONTH); // Reminder: January = 0
+			if (latitude > 0) {
+				if (month >= 3 && month <= 10) {
+					return true; // Always day at the north pole in June
+				} else {
+					return false; // Always night at the north pole in December
+				}
+			} else {
+				if (month >= 3 && month <= 10) {
+					return false; // Always night at the south pole in June
+				} else {
+					return true; // Always day at the south pole in December
+				}
+			}
+		}
+		Calendar sunrise = sunriseSunset[0];
+		Calendar sunset = sunriseSunset[1];
+		return calendar.after(sunrise) && calendar.before(sunset);
 	}
 
 	/**
 	 * @param latitude  the latitude of the location in degrees.
 	 * @param longitude the longitude of the location in degrees (West is negative)
-	 * @return true if it is currently night at the given location. This returns
-	 * true if the current time at the location is before the sunrise or
-	 * after the sunset for that location.
+	 * @return true if it is night at the given location currently. This returns
+	 * true if the current time at the location is after the astronomical twilight dusk and
+	 * before the astronomical twilight dawn for that location.
 	 */
 	public static boolean isNight(double latitude, double longitude) {
-		Calendar today = Calendar.getInstance();
-		Calendar[] sunriseSunset = getSunriseSunset(today, latitude, longitude);
-		// In extreme latitudes, there may be no sunrise/sunset time in summer or
-		// winter, because it will be day or night 24 hours
-		if (sunriseSunset == null) {
-			int month = today.get(Calendar.MONTH); // Reminder: January = 0
+		Calendar now = Calendar.getInstance();
+		return isNight(now, latitude, longitude);
+	}
+
+	/**
+	 * @param calendar  a datetime
+	 * @param latitude  the latitude of the location in degrees.
+	 * @param longitude the longitude of the location in degrees (West is negative)
+	 * @return true if it is night at the given location and datetime. This returns
+	 * true if the given datetime at the location is after the astronomical twilight dusk and before
+	 * the astronomical twilight dawn.
+	 */
+	public static boolean isNight(Calendar calendar, double latitude, double longitude) {
+		Calendar[] astronomicalTwilight = getAstronomicalTwilight(calendar, latitude, longitude);
+		if (astronomicalTwilight == null) {
+			int month = calendar.get(Calendar.MONTH); // Reminder: January = 0
 			if (latitude > 0) {
 				if (month >= 3 && month <= 10) {
 					return false; // Always day at the north pole in June
@@ -448,10 +493,11 @@ public class SunriseSunset {
 				}
 			}
 		}
-		Calendar sunrise = sunriseSunset[0];
-		Calendar sunset = sunriseSunset[1];
-		Calendar now = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-		return now.before(sunrise) || now.after(sunset);
+		Calendar dawn = astronomicalTwilight[0];
+		Calendar dusk = astronomicalTwilight[1];
+		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss z");
+		format.setTimeZone(calendar.getTimeZone());
+		return calendar.before(dawn) || calendar.after(dusk);
 	}
 
 	/**

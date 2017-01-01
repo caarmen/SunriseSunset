@@ -360,6 +360,42 @@ class SunriseSunsetTestUtils {
                 + ")", absTimeDifference < toleranceMillis);
     }
 
+    static void testIsDayNightTwilight(String timeZoneString, String inputDayString,
+                               String dayTime, String eveningTwilightTime, String nightTime, String morningTwilightTime,
+                               double latitude, double longitude) {
+        testIsDay(timeZoneString, inputDayString + " " + dayTime, latitude, longitude, true);
+        testIsNight(timeZoneString, inputDayString + " " + dayTime, latitude, longitude, false);
+        SunriseSunsetTwilightTestUtils.testIsTwilight(timeZoneString, inputDayString + " " + dayTime, latitude, longitude, false);
+
+        testIsDay(timeZoneString, inputDayString + " " + eveningTwilightTime, latitude, longitude, false);
+        testIsNight(timeZoneString, inputDayString + " " + eveningTwilightTime, latitude, longitude, false);
+        SunriseSunsetTwilightTestUtils.testIsTwilight(timeZoneString, inputDayString + " " + eveningTwilightTime, latitude, longitude, true);
+
+        testIsDay(timeZoneString, inputDayString + " " + nightTime, latitude, longitude, false);
+        testIsNight(timeZoneString, inputDayString + " " + nightTime, latitude, longitude, true);
+        SunriseSunsetTwilightTestUtils.testIsTwilight(timeZoneString, inputDayString + " " + nightTime, latitude, longitude, false);
+
+        testIsDay(timeZoneString, inputDayString + " " + morningTwilightTime, latitude, longitude, false);
+        testIsNight(timeZoneString, inputDayString + " " + morningTwilightTime, latitude, longitude, false);
+        SunriseSunsetTwilightTestUtils.testIsTwilight(timeZoneString, inputDayString + " " + morningTwilightTime, latitude, longitude, true);
+    }
+
+    private static void testIsDay(String timeZoneString, String inputDayString,
+                                    double latitude, double longitude, boolean expectedIsDay) {
+        TimeZone timeZone = TimeZone.getTimeZone(timeZoneString);
+        Calendar inputDay = SunriseSunsetTestUtils.parseDate(timeZone, SunriseSunsetTestUtils.DATE_FORMAT_MINUTES, inputDayString);
+        boolean actualIsDay = SunriseSunset.isDay(inputDay, latitude, longitude);
+        Assert.assertEquals(expectedIsDay, actualIsDay);
+    }
+
+    private static void testIsNight(String timeZoneString, String inputNightString,
+                          double latitude, double longitude, boolean expectedIsNight) {
+        TimeZone timeZone = TimeZone.getTimeZone(timeZoneString);
+        Calendar inputNight = SunriseSunsetTestUtils.parseDate(timeZone, SunriseSunsetTestUtils.DATE_FORMAT_MINUTES, inputNightString);
+        boolean actualIsNight = SunriseSunset.isNight(inputNight, latitude, longitude);
+        Assert.assertEquals(expectedIsNight, actualIsNight);
+    }
+
     /**
      * Test the day/night status of a location. Since the day/night status of a
      * location depends on when the unit test is executed, we can only do an

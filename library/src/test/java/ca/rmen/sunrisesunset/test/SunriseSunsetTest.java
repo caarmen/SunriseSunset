@@ -18,7 +18,6 @@
  */
 package ca.rmen.sunrisesunset.test;
 
-import ca.rmen.sunrisesunset.SunriseSunset;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -304,24 +303,18 @@ public class SunriseSunsetTest {
     }
 
     /**
-     * Tests the {@link SunriseSunset#isDay(double, double)} method for a few
-     * locations. The value of isDay will depend on when the test is executed
-     * (time of day and time of year). We approximately validate the result: If
-     * the method returns true (day), we compare the current time to the
-     * sunrise/sunset of the longest day. If the method returns false (night),
-     * we compare the current time to the sunrise/sunset of the longest night.
+     * Test if a particular datetime is during the day for some locations
      */
     @Test
-    public void testDayOrNight() {
-        SunriseSunsetTestUtils.testDayOrNight("Honolulu", "Pacific/Honolulu", 21.3069, -157.8583, "5:48", "7:13", "17:47", "19:19");
-        SunriseSunsetTestUtils.testDayOrNight("Los Angeles", "PST", 34.0522, -118.2437, "5:40", "7:00", "16:42", "20:09");
-        SunriseSunsetTestUtils.testDayOrNight("Chicago", "CST", 41.8781, -87.6298, "5:14", "7:19", "16:19", "20:31");
-        SunriseSunsetTestUtils.testDayOrNight("Buenos Aires", "America/Argentina/Buenos_Aires", -34.6092, -58.3732, "5:32", "8:02", "17:48", "20:11");
-        SunriseSunsetTestUtils.testDayOrNight("Dublin", "Europe/Dublin", 53.3441, -6.2675, "4:55", "8:42", "16:05", "21:58");
-        SunriseSunsetTestUtils.testDayOrNight("Paris", "CET", 48.8567, 2.351, "5:45", "8:45", "16:53", "21:59");
-        SunriseSunsetTestUtils.testDayOrNight("Tokyo", "Japan", 35.6938, 139.7036, "4:24", "6:52", "16:27", "19:02");
-        SunriseSunsetTestUtils.testDayOrNight("Sydney", "Australia/Sydney", -33.86, 151.2111, "5:36", "7:02", "16:52", "20:10");
-
+    public void testIsDay() {
+        SunriseSunsetTestUtils.testIsDayNightTwilight("PST", "20130120", "17:00", "18:30", "23:00", "05:35", 34.0522, -118.2437);
+        SunriseSunsetTestUtils.testIsDayNightTwilight("CET", "20130120", "17:00", "19:00", "19:24", "07:00", 48.8567, 2.351);
+        SunriseSunsetTestUtils.testIsDayNightTwilight("Australia/Sydney", "20121225", "20:0", "21:30", "21:56", "04:30", -33.86, 151.2111);
+        SunriseSunsetTestUtils.testIsDayNightTwilight("Japan", "20130501", "18:00", "19:40", "20:06", "03:30", 35.6938, 139.7036);
+        SunriseSunsetTestUtils.testIsDayNightTwilight("CST", "20130622", "20:20", "22:30", "23:43", "03:30", 41.8781, -87.6298);
+        SunriseSunsetTestUtils.testIsDayNightTwilight("Pacific/Honolulu", "20150827", "18:49", "20:00", "20:13", "05:00", 21.3069, -157.8583);
+        SunriseSunsetTestUtils.testIsDayNightTwilight("America/Argentina/Buenos_Aires", "20130126", "20:00", "21:30", "21:46","05:00", -34.6092, -58.3732);
+        SunriseSunsetTestUtils.testIsDayNightTwilight("America/Argentina/Buenos_Aires", "20131020", "19:07", "20:30", "20:44", "05:05", -34.6092, -58.3732);
     }
 
 
