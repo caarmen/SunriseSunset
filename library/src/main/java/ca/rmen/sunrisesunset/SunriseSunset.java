@@ -541,4 +541,26 @@ public class SunriseSunset {
 				|| (calendar.after(astronomicalTwilight[0]) && calendar.before(nauticalTwilight[0])));
 	}
 
+	/**
+	 * @param latitude  the latitude of the location in degrees.
+	 * @param longitude the longitude of the location in degrees (West is negative)
+	 * @return true if it is civil, nautical, or astronomical twilight currently at the given location.
+	 */
+	public static boolean isTwilight(double latitude, double longitude) {
+		Calendar today = Calendar.getInstance();
+		return isTwilight(today, latitude, longitude);
+	}
+
+	/**
+	 * @param latitude  the latitude of the location in degrees.
+	 * @param longitude the longitude of the location in degrees (West is negative)
+	 * @param calendar the given datetime to check for twilight
+     * @return true if at the given location and calendar, it is civil, nautical, or astronomical twilight.
+     */
+	public static boolean isTwilight(Calendar calendar, double latitude, double longitude) {
+		return isCivilTwilight(calendar, latitude, longitude)
+				|| isNauticalTwilight(calendar, latitude, longitude)
+				|| isAstronomicalTwilight(calendar, latitude, longitude);
+	}
+
 }

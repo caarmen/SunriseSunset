@@ -230,7 +230,6 @@ public class SunriseSunsetTest {
      */
     @Test
     public void testAstronomicalTwilight() {
-
         SunriseSunsetTwilightTestUtils.testAstronomicalTwilight("PST", "20130120", 34.0522, -118.2437, "05:30", "18:38");
         SunriseSunsetTwilightTestUtils.testAstronomicalTwilight("CET", "20130120", 48.8567, 2.351, "6:43", "19:20");
         SunriseSunsetTwilightTestUtils.testAstronomicalTwilight("Australia/Sydney", "20121225", -33.86, 151.2111, "03:59", "21:52");
@@ -264,6 +263,21 @@ public class SunriseSunsetTest {
         SunriseSunsetTwilightTestUtils.testIsAstronomicalTwilight("America/Argentina/Buenos_Aires", "20131019", "20:05", "20:30", "20:41", "04:36", "05:05", "05:12", -34.6092, -58.3732);
         SunriseSunsetTwilightTestUtils.testIsAstronomicalTwilight("America/Argentina/Buenos_Aires", "20130126", "21:04", "21:30", "21:44", "04:28", "05:00", "05:08", -34.6092, -58.3732);
         SunriseSunsetTwilightTestUtils.testIsAstronomicalTwilight("America/Argentina/Buenos_Aires", "20131020", "20:06", "20:30", "20:42", "04:34", "05:05", "05:10", -34.6092, -58.3732);
+    }
+
+    /**
+     * Test if a particular datetime is in twilight for some locations.
+     */
+    @Test
+    public void testIsTwilight() {
+        SunriseSunsetTwilightTestUtils.testIsTwilight("PST", "20130120", "17:09", "18:30", "18:40", "5:28", "05:35", "06:59", 34.0522, -118.2437);
+        SunriseSunsetTwilightTestUtils.testIsTwilight("CET", "20130120", "17:25", "19:00", "19:22", "06:41", "07:00", "08:40", 48.8567, 2.351);
+        SunriseSunsetTwilightTestUtils.testIsTwilight("Australia/Sydney", "20121225", "20:06", "21:30", "21:54", "03:57", "04:30", "05:45", -33.86, 151.2111);
+        SunriseSunsetTwilightTestUtils.testIsTwilight("Japan", "20130501", "18:25", "19:40", "20:04", "03:12", "03:30", "04:52", 35.6938, 139.7036);
+        SunriseSunsetTwilightTestUtils.testIsTwilight("CST", "20130622", "20:27", "22:30", "22:43", "03:02", "03:30", "05:18", 41.8781, -87.6298);
+        SunriseSunsetTwilightTestUtils.testIsTwilight("Pacific/Honolulu", "20150827", "18:51", "20:00", "20:11", "04:55", "05:00", "06:16", 21.3069, -157.8583);
+        SunriseSunsetTwilightTestUtils.testIsTwilight("America/Argentina/Buenos_Aires", "20130126", "20:02", "21:30", "21:44", "04:28", "05:00", "06:10", -34.6092, -58.3732);
+        SunriseSunsetTwilightTestUtils.testIsTwilight("America/Argentina/Buenos_Aires", "20131020", "19:09", "20:30", "20:42", "04:34", "05:05", "06:07", -34.6092, -58.3732);
     }
 
     /**

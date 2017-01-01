@@ -66,6 +66,18 @@ class SunriseSunsetTwilightTestUtils {
         testIsAstronomicalTwilight(timeZoneString, inputDayString + " " + timeAfterTwilightDawn, latitude, longitude, false);
     }
 
+    static void testIsTwilight(String timeZoneString, String inputDayString,
+                                           String timeBeforeTwilightDusk, String timeDuringEveningTwilight, String timeAfterTwilightDusk,
+                                           String timeBeforeTwilightDawn, String timeDuringMorningTwilight, String timeAfterTwilightDawn,
+                                           double latitude, double longitude) {
+        testIsTwilight(timeZoneString, inputDayString + " " + timeBeforeTwilightDusk, latitude, longitude, false);
+        testIsTwilight(timeZoneString, inputDayString + " " + timeDuringEveningTwilight, latitude, longitude, true);
+        testIsTwilight(timeZoneString, inputDayString + " " + timeAfterTwilightDusk, latitude, longitude, false);
+        testIsTwilight(timeZoneString, inputDayString + " " + timeBeforeTwilightDawn, latitude, longitude, false);
+        testIsTwilight(timeZoneString, inputDayString + " " + timeDuringMorningTwilight, latitude, longitude, true);
+        testIsTwilight(timeZoneString, inputDayString + " " + timeAfterTwilightDawn, latitude, longitude, false);
+    }
+
     static void testIsCivilTwilight(String timeZoneString, String inputDayString,
                                     double latitude, double longitude, boolean expectedIsCivilTwilight) {
         TimeZone timeZone = TimeZone.getTimeZone(timeZoneString);
@@ -90,6 +102,13 @@ class SunriseSunsetTwilightTestUtils {
         Assert.assertEquals(expectedIsAstronomicalTwilight, actualIsAstronomicalTwilight);
     }
 
+    static void testIsTwilight(String timeZoneString, String inputDayString,
+                                           double latitude, double longitude, boolean expectedIsTwilight) {
+        TimeZone timeZone = TimeZone.getTimeZone(timeZoneString);
+        Calendar inputDay = SunriseSunsetTestUtils.parseDate(timeZone, SunriseSunsetTestUtils.DATE_FORMAT_MINUTES, inputDayString);
+        boolean actualIsTwilight = SunriseSunset.isTwilight(inputDay, latitude, longitude);
+        Assert.assertEquals(expectedIsTwilight, actualIsTwilight);
+    }
 
     /**
      * @param timeZoneString              a valid Java timezone
