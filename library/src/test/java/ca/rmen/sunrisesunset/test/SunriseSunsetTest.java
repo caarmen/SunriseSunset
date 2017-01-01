@@ -214,6 +214,7 @@ public class SunriseSunsetTest {
 		testAstronomicalTwilight("Antarctica/McMurdo", "20150419", -77.8456, 166.6693, "04:27", "21:18", accuracyMinutes);
 		testSolarNoon("Antarctica/McMurdo", "20150419", -77.8456, 166.6693, "12:53");
 		testIsCivilTwilight("Antarctica/McMurdo", "20150419", "15:06", "17:00", "17:23", "08:24", "09:00", "10:39", -77.8456, 166.6693);
+		testIsNauticalTwilight("Antarctica/McMurdo", "20150419", "17:17", "18:00", "19:20", "06:27", "07:00", "08:28", -77.8456, 166.6693);
 
 		testSunriseSunset("Antarctica/McMurdo", "20150621", -77.8456, 166.6693, null, null);
 		testCivilTwilight("Antarctica/McMurdo", "20150621", -77.8456, 166.6693, null, null);
@@ -222,6 +223,10 @@ public class SunriseSunsetTest {
 		testSolarNoon("Antarctica/McMurdo", "20150621", -77.8456, 166.6693, null);
 		testIsCivilTwilight("Antarctica/McMurdo", "20150621 12:00", -77.8456, 166.6693, false);
 		testIsCivilTwilight("Antarctica/McMurdo", "20150621 06:00", -77.8456, 166.6693, false);
+		testIsNauticalTwilight("Antarctica/McMurdo", "20150621 14:15", -77.8456, 166.6693, false);
+		testIsNauticalTwilight("Antarctica/McMurdo", "20150621 14:19", -77.8456, 166.6693, false);
+		testIsNauticalTwilight("Antarctica/McMurdo", "20150621 17:14", -77.8456, 166.6693, false);
+		testIsNauticalTwilight("Antarctica/McMurdo", "20150621 17:20", -77.8456, 166.6693, false);
 
 		testSunriseSunset("Antarctica/McMurdo", "20150921", -77.8456, 166.6693, "06:48", "18:46", accuracyMinutes);
 		testCivilTwilight("Antarctica/McMurdo", "20150921", -77.8456, 166.6693, "5:07", "20:27", accuracyMinutes);
@@ -230,6 +235,7 @@ public class SunriseSunsetTest {
 		testAstronomicalTwilight("Antarctica/McMurdo", "20150921", -77.8456, 166.6693, null, null);
 		testSolarNoon("Antarctica/McMurdo", "20150921", -77.8456, 166.6693, "12:47");
 		testIsCivilTwilight("Antarctica/McMurdo", "20150921", "18:44", "20:00", "20:29", "05:05", "06:00", "06:51", -77.8456, 166.6693);
+		testIsNauticalTwilight("Antarctica/McMurdo", "20150921", "20:25", "21:00", "23:13", "02:21", "03:00", "05:10", -77.8456, 166.6693);
 
 		testSunriseSunset("Antarctica/McMurdo", "20151221", -77.8456, 166.6693, null, null);
 		testCivilTwilight("Antarctica/McMurdo", "20151221", -77.8456, 166.6693, null, null);
@@ -238,6 +244,7 @@ public class SunriseSunsetTest {
 		testDayOrNight("Antarctica", "Antarctica/McMurdo", -77.8456, 166.6693, null, null, null, null);
 		testSolarNoon("Antarctica/McMurdo", "20151221", -77.8456, 166.6693, null);
 		testIsCivilTwilight("Antarctica/McMurdo", "20150621 12:00", -77.8456, 166.6693, false);
+		testIsNauticalTwilight("Antarctica/McMurdo", "20150621 12:00", -77.8456, 166.6693, false);
 
 	}
 
@@ -417,6 +424,23 @@ public class SunriseSunsetTest {
 		testIsCivilTwilight("America/Argentina/Buenos_Aires", "20131031", "19:19", "19:25", "19:50", "05:24", "05:40", "05:54", -34.6092, -58.3732);
 	}
 
+	/**
+	 * Test if a particular datetime is in nautical twilight for some locations.
+	 */
+	@Test
+	public void testIsNauticalTwilight() {
+		testIsNauticalTwilight("PST", "20130120", "17:36", "18:00", "18:11", "5:57", "06:25", "06:32", 34.0522, -118.2437);
+		testIsNauticalTwilight("CET", "20130120", "18:02", "18:30", "18:45", "07:19", "07:30", "08:02", 48.8567, 2.351);
+		testIsNauticalTwilight("Australia/Sydney", "20121225", "20:36", "21:00", "21:14", "04:36", "05:00", "05:16", -33.86, 151.2111);
+		testIsNauticalTwilight("Japan", "20130501", "18:53", "19:00", "19:29", "03:47", "04:00", "04:24", 35.6938, 139.7036);
+		testIsNauticalTwilight("CST", "20130622", "21:02", "21:30", "22:50", "03:55", "04:00", "04:43", 41.8781, -87.6298);
+		testIsNauticalTwilight("Pacific/Honolulu", "20150827", "19:14", "19:30", "19:44", "05:22", "05:30", "05:53", 21.3069, -157.8583);
+		testIsNauticalTwilight("America/Argentina/Buenos_Aires", "20130126", "20:30", "21:00", "21:08", "05:04", "05:30", "05:42", -34.6092, -58.3732);
+		testIsNauticalTwilight("America/Argentina/Buenos_Aires", "20131020", "19:35", "20:00", "20:10", "05:06", "05:15", "05:41", -34.6092, -58.3732);
+		testIsNauticalTwilight("America/Argentina/Buenos_Aires", "20130501", "18:36", "19:00", "19:10", "06:31", "06:45", "07:05", -34.6092, -58.3732);
+		testIsNauticalTwilight("America/Argentina/Buenos_Aires", "20131019", "19:34", "20:00", "20:09", "05:08", "05:35", "05:43", -34.6092, -58.3732);
+	}
+
 	private void testIsCivilTwilight(String timeZoneString, String inputDayString,
 									 String timeBeforeTwilightDusk, String timeDuringEveningTwilight, String timeAfterTwilightDusk,
 									 String timeBeforeTwilightDawn, String timeDuringMorningTwilight, String timeAfterTwilightDawn,
@@ -429,12 +453,32 @@ public class SunriseSunsetTest {
 		testIsCivilTwilight(timeZoneString, inputDayString + " " + timeAfterTwilightDawn, latitude, longitude, false);
 	}
 
+	private void testIsNauticalTwilight(String timeZoneString, String inputDayString,
+									 String timeBeforeTwilightDusk, String timeDuringEveningTwilight, String timeAfterTwilightDusk,
+									 String timeBeforeTwilightDawn, String timeDuringMorningTwilight, String timeAfterTwilightDawn,
+									 double latitude, double longitude) {
+		testIsNauticalTwilight(timeZoneString, inputDayString + " " + timeBeforeTwilightDusk, latitude, longitude, false);
+		testIsNauticalTwilight(timeZoneString, inputDayString + " " + timeDuringEveningTwilight, latitude, longitude, true);
+		testIsNauticalTwilight(timeZoneString, inputDayString + " " + timeAfterTwilightDusk, latitude, longitude, false);
+		testIsNauticalTwilight(timeZoneString, inputDayString + " " + timeBeforeTwilightDawn, latitude, longitude, false);
+		testIsNauticalTwilight(timeZoneString, inputDayString + " " + timeDuringMorningTwilight, latitude, longitude, true);
+		testIsNauticalTwilight(timeZoneString, inputDayString + " " + timeAfterTwilightDawn, latitude, longitude, false);
+	}
+
 	private void testIsCivilTwilight(String timeZoneString, String inputDayString,
 									 double latitude, double longitude, boolean expectedIsCivilTwilight) {
 		TimeZone timeZone = TimeZone.getTimeZone(timeZoneString);
 		Calendar inputDay = parseDate(timeZone, DATE_FORMAT_MINUTES, inputDayString);
 		boolean actualIsCivilTwilight = SunriseSunset.isCivilTwilight(inputDay, latitude, longitude);
 		Assert.assertEquals(expectedIsCivilTwilight, actualIsCivilTwilight);
+	}
+
+	private void testIsNauticalTwilight(String timeZoneString, String inputDayString,
+									 double latitude, double longitude, boolean expectedIsNauticalTwilight) {
+		TimeZone timeZone = TimeZone.getTimeZone(timeZoneString);
+		Calendar inputDay = parseDate(timeZone, DATE_FORMAT_MINUTES, inputDayString);
+		boolean actualIsNauticalTwilight = SunriseSunset.isNauticalTwilight(inputDay, latitude, longitude);
+		Assert.assertEquals(expectedIsNauticalTwilight, actualIsNauticalTwilight);
 	}
 
 	/**
