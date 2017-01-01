@@ -213,12 +213,15 @@ public class SunriseSunsetTest {
 		testNauticalTwilight("Antarctica/McMurdo", "20150419", -77.8456, 166.6693, "06:29", "19:17", accuracyMinutes);
 		testAstronomicalTwilight("Antarctica/McMurdo", "20150419", -77.8456, 166.6693, "04:27", "21:18", accuracyMinutes);
 		testSolarNoon("Antarctica/McMurdo", "20150419", -77.8456, 166.6693, "12:53");
+		testIsCivilTwilight("Antarctica/McMurdo", "20150419", "15:06", "17:00", "17:23", "08:24", "09:00", "10:39", -77.8456, 166.6693);
 
 		testSunriseSunset("Antarctica/McMurdo", "20150621", -77.8456, 166.6693, null, null);
 		testCivilTwilight("Antarctica/McMurdo", "20150621", -77.8456, 166.6693, null, null);
 		testNauticalTwilight("Antarctica/McMurdo", "20150621", -77.8456, 166.6693, "11:33", "14:17", accuracyMinutes);
 		testAstronomicalTwilight("Antarctica/McMurdo", "20150621", -77.8456, 166.6693, "08:32", "17:17", accuracyMinutes);
 		testSolarNoon("Antarctica/McMurdo", "20150621", -77.8456, 166.6693, null);
+		testIsCivilTwilight("Antarctica/McMurdo", "20150621 12:00", -77.8456, 166.6693, false);
+		testIsCivilTwilight("Antarctica/McMurdo", "20150621 06:00", -77.8456, 166.6693, false);
 
 		testSunriseSunset("Antarctica/McMurdo", "20150921", -77.8456, 166.6693, "06:48", "18:46", accuracyMinutes);
 		testCivilTwilight("Antarctica/McMurdo", "20150921", -77.8456, 166.6693, "5:07", "20:27", accuracyMinutes);
@@ -226,6 +229,7 @@ public class SunriseSunsetTest {
 		testNauticalTwilight("Antarctica/McMurdo", "20150921", -77.8456, 166.6693, "02:23", "23:11", 5.1);
 		testAstronomicalTwilight("Antarctica/McMurdo", "20150921", -77.8456, 166.6693, null, null);
 		testSolarNoon("Antarctica/McMurdo", "20150921", -77.8456, 166.6693, "12:47");
+		testIsCivilTwilight("Antarctica/McMurdo", "20150921", "18:44", "20:00", "20:29", "05:05", "06:00", "06:51", -77.8456, 166.6693);
 
 		testSunriseSunset("Antarctica/McMurdo", "20151221", -77.8456, 166.6693, null, null);
 		testCivilTwilight("Antarctica/McMurdo", "20151221", -77.8456, 166.6693, null, null);
@@ -233,6 +237,7 @@ public class SunriseSunsetTest {
 		testAstronomicalTwilight("Antarctica/McMurdo", "20151221", -77.8456, 166.6693, null, null);
 		testDayOrNight("Antarctica", "Antarctica/McMurdo", -77.8456, 166.6693, null, null, null, null);
 		testSolarNoon("Antarctica/McMurdo", "20151221", -77.8456, 166.6693, null);
+		testIsCivilTwilight("Antarctica/McMurdo", "20150621 12:00", -77.8456, 166.6693, false);
 
 	}
 
@@ -343,29 +348,6 @@ public class SunriseSunsetTest {
 	}
 
 	/**
-	 * Test the time of solar noon for some locations
-	 */
-	@Test
-	public void testSolarNoon() {
-		testSolarNoon("PST", "20130120", 34.0522, -118.2437, "12:04");
-		testSolarNoon("CET", "20130120", 48.8567, 2.351, "13:02");
-		testSolarNoon("Australia/Sydney", "20121225", -33.86, 151.2111, "12:55");
-		testSolarNoon("Japan", "20130501", 35.6938, 139.7036, "11:38");
-		testSolarNoon("Europe/Dublin", "20130605", 53.3441, -6.2675, "13:24");
-		testSolarNoon("CST", "20130622", 41.8781, -87.6298, "12:52");
-		testSolarNoon("Pacific/Honolulu", "20150827", 21.3069, -157.8583, "12:33");
-		testSolarNoon("America/Argentina/Buenos_Aires", "20130501", -34.6092, -58.3732, "12:51");
-		testSolarNoon("America/Argentina/Buenos_Aires", "20131019", -34.6092, -58.3732, "12:39");
-
-		// The following test will not work on Java versions older than 2009.
-		testSolarNoon("America/Argentina/Buenos_Aires", "20130126", -34.6092, -58.3732, "13:06");
-		// The following test will not work on Java versions older than 2009.
-		testSolarNoon("America/Argentina/Buenos_Aires", "20131020", -34.6092, -58.3732, "12:38");
-		// The following test will not work on Java versions older than 2009.
-		testSolarNoon("America/Argentina/Buenos_Aires", "20131031", -34.6092, -58.3732, "12:37");
-	}
-
-	/**
 	 * Test the time of civil twilight for some locations.
 	 */
 	@Test
@@ -398,6 +380,61 @@ public class SunriseSunsetTest {
 		// The following test will not work on Java versions older than 2009.
 		testCivilTwilight("America/Argentina/Buenos_Aires", "20131031",
 				-34.6092, -58.3732, "05:26", "19:48");
+	}
+
+	/**
+	 * Test if a particular datetime is in civil twilight for some locations.
+	 */
+	@Test
+	public void testIsCivilTwilight() {
+		// Civil twilight at 17:11-17:38 and 6:30-06:57
+		testIsCivilTwilight("PST", "20130120", "17:09", "17:25", "17:45", "06:25", "06:35", "06:59", 34.0522, -118.2437);
+
+		// Civil twilight at 17:28-18:04 and 08:00-08:35
+		testIsCivilTwilight("CET", "20130120", "17:25", "17:30", "18:15", "07:55", "08:30", "08:40", 48.8567, 2.351);
+
+		// Civil twilight at 20:07-20:38 and 05:14-05:43
+		testIsCivilTwilight("Australia/Sydney", "20121225", "20:06", "20:16", "20:39", "05:13", "05:30", "05:45", -33.86, 151.2111);
+
+		// Civil twilight between 18:27-18:55 and 04:22-04:49
+		testIsCivilTwilight("Japan", "20130501", "18:25", "18:40", "18:57", "04:20", "04:30", "04:52", 35.6938, 139.7036);
+
+		// Civil twilight between 21:46-22:37 to 04:10-05:01
+		testIsCivilTwilight("Europe/Dublin", "20130605", "21:44", "21:50", "22:39", "04:00", "04:30", "05:03", 53.3441, -6.2675);
+
+		// Civil twilight between 20:29-21:04 and 04:41-05:16
+		testIsCivilTwilight("CST", "20130622", "20:27", "21:00", "21:06", "04:39", "04:50", "05:18", 41.8781, -87.6298);
+
+		// Civil twilight between 18:53-19:16 and 05:51-06:13
+		testIsCivilTwilight("Pacific/Honolulu", "20150827", "18:51", "19:00", "19:18", "05:49", "06:00", "06:16", 21.3069, -157.8583);
+
+		// The following test will not work on Java versions older than 2009.
+		// Civil twilight between 20:04-20:32 and 05:40-06:07
+		testIsCivilTwilight("America/Argentina/Buenos_Aires", "20130126", "20:02", "20:15", "20:34", "05:38", "06:00", "06:10", -34.6092, -58.3732);
+		// Civil twilight between 19:11-19:37 and 05:39-06:05
+		testIsCivilTwilight("America/Argentina/Buenos_Aires", "20131020", "19:09", "19:25", "19:39", "05:37", "06:00", "06:07", -34.6092, -58.3732);
+		// Civil twilight between 19:21-19:48 and 05:26-05:52
+		testIsCivilTwilight("America/Argentina/Buenos_Aires", "20131031", "19:19", "19:25", "19:50", "05:24", "05:40", "05:54", -34.6092, -58.3732);
+	}
+
+	private void testIsCivilTwilight(String timeZoneString, String inputDayString,
+									 String timeBeforeTwilightDusk, String timeDuringEveningTwilight, String timeAfterTwilightDusk,
+									 String timeBeforeTwilightDawn, String timeDuringMorningTwilight, String timeAfterTwilightDawn,
+									 double latitude, double longitude) {
+		testIsCivilTwilight(timeZoneString, inputDayString + " " + timeBeforeTwilightDusk, latitude, longitude, false);
+		testIsCivilTwilight(timeZoneString, inputDayString + " " + timeDuringEveningTwilight, latitude, longitude, true);
+		testIsCivilTwilight(timeZoneString, inputDayString + " " + timeAfterTwilightDusk, latitude, longitude, false);
+		testIsCivilTwilight(timeZoneString, inputDayString + " " + timeBeforeTwilightDawn, latitude, longitude, false);
+		testIsCivilTwilight(timeZoneString, inputDayString + " " + timeDuringMorningTwilight, latitude, longitude, true);
+		testIsCivilTwilight(timeZoneString, inputDayString + " " + timeAfterTwilightDawn, latitude, longitude, false);
+	}
+
+	private void testIsCivilTwilight(String timeZoneString, String inputDayString,
+									 double latitude, double longitude, boolean expectedIsCivilTwilight) {
+		TimeZone timeZone = TimeZone.getTimeZone(timeZoneString);
+		Calendar inputDay = parseDate(timeZone, DATE_FORMAT_MINUTES, inputDayString);
+		boolean actualIsCivilTwilight = SunriseSunset.isCivilTwilight(inputDay, latitude, longitude);
+		Assert.assertEquals(expectedIsCivilTwilight, actualIsCivilTwilight);
 	}
 
 	/**
@@ -469,6 +506,30 @@ public class SunriseSunsetTest {
 		testAstronomicalTwilight("America/Argentina/Buenos_Aires", "20131031",
 				-34.6092, -58.3732, "04:21", "20:53");
 	}
+
+	/**
+	 * Test the time of solar noon for some locations
+	 */
+	@Test
+	public void testSolarNoon() {
+		testSolarNoon("PST", "20130120", 34.0522, -118.2437, "12:04");
+		testSolarNoon("CET", "20130120", 48.8567, 2.351, "13:02");
+		testSolarNoon("Australia/Sydney", "20121225", -33.86, 151.2111, "12:55");
+		testSolarNoon("Japan", "20130501", 35.6938, 139.7036, "11:38");
+		testSolarNoon("Europe/Dublin", "20130605", 53.3441, -6.2675, "13:24");
+		testSolarNoon("CST", "20130622", 41.8781, -87.6298, "12:52");
+		testSolarNoon("Pacific/Honolulu", "20150827", 21.3069, -157.8583, "12:33");
+		testSolarNoon("America/Argentina/Buenos_Aires", "20130501", -34.6092, -58.3732, "12:51");
+		testSolarNoon("America/Argentina/Buenos_Aires", "20131019", -34.6092, -58.3732, "12:39");
+
+		// The following test will not work on Java versions older than 2009.
+		testSolarNoon("America/Argentina/Buenos_Aires", "20130126", -34.6092, -58.3732, "13:06");
+		// The following test will not work on Java versions older than 2009.
+		testSolarNoon("America/Argentina/Buenos_Aires", "20131020", -34.6092, -58.3732, "12:38");
+		// The following test will not work on Java versions older than 2009.
+		testSolarNoon("America/Argentina/Buenos_Aires", "20131031", -34.6092, -58.3732, "12:37");
+	}
+
 
 	/**
 	 * @param timeZoneString              a valid Java timezone

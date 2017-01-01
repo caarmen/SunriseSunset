@@ -454,4 +454,55 @@ public class SunriseSunset {
 		return now.before(sunrise) || now.after(sunset);
 	}
 
+	public static boolean isCivilTwilight(double latitude, double longitude) {
+		Calendar today = Calendar.getInstance();
+		return isCivilTwilight(today, latitude, longitude);
+	}
+
+	public static boolean isCivilTwilight(Calendar calendar, double latitude, double longitude) {
+		Calendar[] sunriseSunset = getSunriseSunset(calendar, latitude, longitude);
+		if (sunriseSunset == null) return false;
+		Calendar[] civilTwilight = getCivilTwilight(calendar, latitude, longitude);
+		if (civilTwilight == null) return false;
+
+		// We're in civil twilight between sunset and civil twilight dusk,
+		// or between civil twilight dawn and sunrise:
+		return (calendar.after(sunriseSunset[1]) && calendar.before(civilTwilight[1])
+				|| (calendar.after(civilTwilight[0]) && calendar.before(sunriseSunset[0])));
+	}
+
+	public static boolean isNauticalTwilight(double latitude, double longitude) {
+		Calendar today = Calendar.getInstance();
+		return isNauticalTwilight(today, latitude, longitude);
+	}
+
+	public static boolean isNauticalTwilight(Calendar calendar, double latitude, double longitude) {
+		Calendar[] civilTwilight = getCivilTwilight(calendar, latitude, longitude);
+		if (civilTwilight == null) return false;
+		Calendar[] nauticalTwilight = getNauticalTwilight(calendar, latitude, longitude);
+		if (nauticalTwilight == null) return false;
+
+		// We're in nautical twilight between civil twilight dusk and nautical twilight dusk,
+		// or between nautical twilight dawn and civil twilight dawn.
+		return (calendar.after(civilTwilight[1]) && calendar.before(nauticalTwilight[1])
+				|| (calendar.after(nauticalTwilight[0]) && calendar.before(civilTwilight[0])));
+	}
+
+	public static boolean isAstronomicalTwilight(double latitude, double longitude) {
+		Calendar today = Calendar.getInstance();
+		return isAstronomicalTwilight(today, latitude, longitude);
+	}
+
+	public static boolean isAstronomicalTwilight(Calendar calendar, double latitude, double longitude) {
+		Calendar[] nauticalTwilight = getNauticalTwilight(calendar, latitude, longitude);
+		if (nauticalTwilight == null) return false;
+		Calendar[] astronomicalTwilight = getAstronomicalTwilight(calendar, latitude, longitude);
+		if (astronomicalTwilight == null) return false;
+
+		// We're in astronomical twilight between nautical twilight dusk and astronomical twilight dusk,
+		// or between astronomical twilight dawn and nautical twilight dawn.
+		return (calendar.after(nauticalTwilight[1]) && calendar.before(astronomicalTwilight[1])
+				|| (calendar.after(astronomicalTwilight[0]) && calendar.before(nauticalTwilight[0])));
+	}
+
 }
