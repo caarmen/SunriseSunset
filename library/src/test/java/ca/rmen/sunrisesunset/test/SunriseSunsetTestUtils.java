@@ -380,6 +380,22 @@ class SunriseSunsetTestUtils {
         SunriseSunsetTwilightTestUtils.testIsTwilight(timeZoneString, inputDayString + " " + morningTwilightTime, latitude, longitude, true);
     }
 
+    static void testGetDayPeriod(String timeZoneString, String inputDayString,
+                                 String astronomicalTwilightMorningTime, String nauticalTwilightMorningTime, String civilTwilightMorningTime,
+                                 String dayTime,
+                                 String civilTwilightEveningTime, String nauticalTwilightEveningTime, String astronomicalTwilightEveningTime,
+                                 String nightTime,
+                                 double latitude, double longitude) {
+        testGetDayPeriod(timeZoneString, inputDayString + " " + astronomicalTwilightMorningTime, latitude, longitude, SunriseSunset.DayPeriod.ASTRONOMICAL_TWILIGHT);
+        testGetDayPeriod(timeZoneString, inputDayString + " " + nauticalTwilightMorningTime, latitude, longitude, SunriseSunset.DayPeriod.NAUTICAL_TWILIGHT);
+        testGetDayPeriod(timeZoneString, inputDayString + " " + civilTwilightMorningTime, latitude, longitude, SunriseSunset.DayPeriod.CIVIL_TWILIGHT);
+        testGetDayPeriod(timeZoneString, inputDayString + " " + dayTime, latitude, longitude, SunriseSunset.DayPeriod.DAY);
+        testGetDayPeriod(timeZoneString, inputDayString + " " + civilTwilightEveningTime, latitude, longitude, SunriseSunset.DayPeriod.CIVIL_TWILIGHT);
+        testGetDayPeriod(timeZoneString, inputDayString + " " + nauticalTwilightEveningTime, latitude, longitude, SunriseSunset.DayPeriod.NAUTICAL_TWILIGHT);
+        testGetDayPeriod(timeZoneString, inputDayString + " " + astronomicalTwilightEveningTime, latitude, longitude, SunriseSunset.DayPeriod.ASTRONOMICAL_TWILIGHT);
+        testGetDayPeriod(timeZoneString, inputDayString + " " + nightTime, latitude, longitude, SunriseSunset.DayPeriod.NIGHT);
+    }
+
     private static void testIsDay(String timeZoneString, String inputDayString,
                                     double latitude, double longitude, boolean expectedIsDay) {
         TimeZone timeZone = TimeZone.getTimeZone(timeZoneString);
@@ -395,6 +411,14 @@ class SunriseSunsetTestUtils {
         boolean actualIsNight = SunriseSunset.isNight(inputNight, latitude, longitude);
         Assert.assertEquals(expectedIsNight, actualIsNight);
     }
+
+    static void testGetDayPeriod(String timeZoneString, String timeString, double latitude, double longitude, SunriseSunset.DayPeriod expectedDayPeriod) {
+        TimeZone timeZone = TimeZone.getTimeZone(timeZoneString);
+        Calendar calendar = SunriseSunsetTestUtils.parseDate(timeZone, SunriseSunsetTestUtils.DATE_FORMAT_MINUTES, timeString);
+        SunriseSunset.DayPeriod actualDayPeriod = SunriseSunset.getDayPeriod(calendar, latitude, longitude);
+        Assert.assertEquals(expectedDayPeriod, actualDayPeriod);
+    }
+
 
     /**
      * Test the day/night status of a location. Since the day/night status of a

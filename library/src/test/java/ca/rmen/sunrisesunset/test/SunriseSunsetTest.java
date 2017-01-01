@@ -317,5 +317,14 @@ public class SunriseSunsetTest {
         SunriseSunsetTestUtils.testIsDayNightTwilight("America/Argentina/Buenos_Aires", "20131020", "19:07", "20:30", "20:44", "05:05", -34.6092, -58.3732);
     }
 
+    /**
+     * Test the day period calculation
+     */
+    @Test
+    public void testGetDayPeriod() {
+        SunriseSunsetTestUtils.testGetDayPeriod("PST", "20130120", "5:35", "6:25", "6:35", "12:00", "17:25", "18:00", "18:30", "23:30", 34.0522, -118.2437);
+        SunriseSunsetTestUtils.testGetDayPeriod("CET", "20130120", "7:00", "7:30", "8:30", "12:00", "17:30", "18:30", "19:00","21:00", 48.8567, 2.351);
+        SunriseSunsetTestUtils.testGetDayPeriod("America/Argentina/Buenos_Aires", "20131020", "5:05", "5:15", "06:00", "12:00", "19:25", "20:00", "20:30", "20:45", -34.6092, -58.3732);
+    }
 
 }

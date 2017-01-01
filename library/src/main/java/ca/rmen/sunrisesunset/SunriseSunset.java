@@ -36,6 +36,14 @@ import java.util.TimeZone;
  */
 public class SunriseSunset {
 
+	public enum DayPeriod {
+		DAY,
+		CIVIL_TWILIGHT,
+		NAUTICAL_TWILIGHT,
+		ASTRONOMICAL_TWILIGHT,
+		NIGHT
+	}
+
 	/**
 	 * The altitude of the sun (solar elevation angle) at the moment of sunrise or sunset: -0.833
 	 */
@@ -611,6 +619,15 @@ public class SunriseSunset {
 		return isCivilTwilight(calendar, latitude, longitude)
 				|| isNauticalTwilight(calendar, latitude, longitude)
 				|| isAstronomicalTwilight(calendar, latitude, longitude);
+	}
+
+	public static DayPeriod getDayPeriod(Calendar calendar, double latitude, double longitude) {
+		if (isDay(calendar, latitude, longitude)) return DayPeriod.DAY;
+		if (isCivilTwilight(calendar, latitude, longitude)) return DayPeriod.CIVIL_TWILIGHT;
+		if (isNauticalTwilight(calendar, latitude, longitude)) return DayPeriod.NAUTICAL_TWILIGHT;
+		if (isAstronomicalTwilight(calendar, latitude, longitude)) return DayPeriod.ASTRONOMICAL_TWILIGHT;
+		if (isNight(calendar, latitude, longitude)) return DayPeriod.NIGHT;
+		return DayPeriod.NIGHT;
 	}
 
 }
