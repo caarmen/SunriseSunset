@@ -58,6 +58,8 @@ class SunriseSunsetCLI {
 		System.out.println("Current time at: " + latitude + "," + longitude + ":");
 		printCalendar(tz, now);
 
+		System.out.println("Current day period is " + SunriseSunset.getDayPeriod(now, latitude, longitude));
+
 		System.out.println("Lookup for date:");
 		printCalendar(tz, day);
 
@@ -77,6 +79,10 @@ class SunriseSunsetCLI {
 		result = SunriseSunset.getAstronomicalTwilight(day, latitude, longitude);
 		System.out.println("Astronomical twilight:");
 		printCalendars(tz, result);
+
+		Calendar solarNoon = SunriseSunset.getSolarNoon(day, latitude, longitude);
+		System.out.println("Solar noon:");
+		printCalendar(tz, solarNoon);
 	}
 
 	private static void printCalendar(TimeZone tz, Calendar cal) {

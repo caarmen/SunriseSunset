@@ -522,6 +522,7 @@ public class SunriseSunset {
 	}
 
 	/**
+	 * @param calendar the datetime for which to determine if it's civil twilight in the given location
 	 * @param latitude  the latitude of the location in degrees.
 	 * @param longitude the longitude of the location in degrees (West is negative)
 	 * @return true if it is civil twilight at the given location and the given calendar.
@@ -552,6 +553,7 @@ public class SunriseSunset {
 	}
 
 	/**
+	 * @param calendar the datetime for which to determine if it's nautical twilight in the given location
 	 * @param latitude  the latitude of the location in degrees.
 	 * @param longitude the longitude of the location in degrees (West is negative)
 	 * @return true if it is nautical twilight at the given location and the given calendar.
@@ -582,6 +584,7 @@ public class SunriseSunset {
 	}
 
 	/**
+	 * @param calendar the datetime for which to determine if it's astronomical twilight in the given location
 	 * @param latitude  the latitude of the location in degrees.
 	 * @param longitude the longitude of the location in degrees (West is negative)
 	 * @return true if it is astronomical twilight at the given location and the given calendar.
