@@ -75,6 +75,44 @@ System.out.println("Astronomical twilight stops at: " + astronomicalTwilight[0].
 System.out.println("Astronomical twilight starts at: " + astronomicalTwilight[1].getTime());
 ```
 
+Command-line interface
+======================
+
+A command-line tool is provided. You can download it from the [releases page](https://github.com/caarmen/SunriseSunset/releases)
+or build it with `mvn clean package`, which will place it in `cli/target`.
+
+Usage:
+
+```
+java -jar /path/to/sunrise-sunset-cli-1.1.1.jar <timezone> <yyyyMMdd> <latitude> <longitude>
+```
+
+Example usage:
+```
+java -jar /path/to/sunrise-sunset-cli-1.1.1.jar Europe/Paris 20171125 48.8 2.35
+Current time at: 48.8,2.35:
+  2017-11-25 18:01:42 Central European Time
+Current day period is NAUTICAL_TWILIGHT
+Day is 31588000 milliseconds long
+Lookup for date:
+  2017-11-25 12:00:00 Central European Time
+Sunrise, Sunset:
+  2017-11-25 08:15:53 Central European Time
+  2017-11-25 17:02:21 Central European Time
+Civil twilight:
+  2017-11-25 07:40:16 Central European Time
+  2017-11-25 17:37:58 Central European Time
+Nautical twilight:
+  2017-11-25 07:01:06 Central European Time
+  2017-11-25 18:17:08 Central European Time
+Astronomical twilight:
+  2017-11-25 06:23:26 Central European Time
+  2017-11-25 18:54:48 Central European Time
+Solar noon:
+  2017-11-25 12:39:07 Central European Time
+```
+
+
 Documentation
 =============
 Javadoc is here: http://caarmen.github.io/SunriseSunset/ca/rmen/sunrisesunset/SunriseSunset.html
