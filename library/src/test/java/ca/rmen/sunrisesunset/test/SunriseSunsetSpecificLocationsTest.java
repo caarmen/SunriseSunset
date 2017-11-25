@@ -94,7 +94,7 @@ public class SunriseSunsetSpecificLocationsTest {
         SunriseSunsetTestUtils.testGetDayPeriod("Antarctica/McMurdo", "20151221 12:00", -77.8456, 166.6693, SunriseSunset.DayPeriod.DAY);
         SunriseSunsetTestUtils.testGetDayPeriod("Antarctica/McMurdo", "20151221 18:00", -77.8456, 166.6693, SunriseSunset.DayPeriod.DAY);
         SunriseSunsetTestUtils.testGetDayPeriod("Antarctica/McMurdo", "20151221 23:00", -77.8456, 166.6693, SunriseSunset.DayPeriod.DAY);
-        SunriseSunsetTestUtils.testDayLength("Antarctica/McMurdo", "20151221", -77.8456, 166.6693, 86400);
+        SunriseSunsetTestUtils.testDayLength("Antarctica/McMurdo", "20151221", -77.8456, 166.6693, 86400000);
 
     }
 
