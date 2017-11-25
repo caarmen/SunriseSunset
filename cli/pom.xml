@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 	Sunrise Sunset Calculator.
-	Copyright (C) 2013-2015 Carmen Alvarez
+	Copyright (C) 2013-2017 Carmen Alvarez
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Lesser General Public
@@ -27,7 +27,7 @@
 	<parent>
 		<groupId>ca.rmen</groupId>
 		<artifactId>sunrise-sunset</artifactId>
-		<version>1.1.0</version>
+		<version>1.1.1</version>
 	</parent>
 
 	<artifactId>sunrise-sunset-cli</artifactId>

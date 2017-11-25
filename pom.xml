@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 	Sunrise Sunset Calculator.
-	Copyright (C) 2013-2015 Carmen Alvarez
+	Copyright (C) 2013-2017 Carmen Alvarez
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Lesser General Public
@@ -27,7 +27,7 @@
 	<groupId>ca.rmen</groupId>
 	<artifactId>sunrise-sunset</artifactId>
 	<packaging>pom</packaging>
-	<version>1.1.0</version>
+	<version>1.1.1</version>
 	<name>sunrise-sunset</name>
 	<description>Provides methods to determine the sunrise, sunset, civil twilight,nautical twilight, and astronomical twilight times of a given location, or if it is currently day or night at a given location.</description>
 	<url>http://github.com/caarmen/SunriseSunset</url>

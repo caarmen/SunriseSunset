@@ -24,7 +24,7 @@ maven { url "https://dl.bintray.com/caarmen/maven/" }
 
 Declare the dependency:
 ```
-compile 'ca.rmen:lib-sunrise-sunset:1.1.0'
+compile 'ca.rmen:lib-sunrise-sunset:1.1.1'
 ```
 Maven:
 ------
@@ -40,15 +40,17 @@ Declare the dependency:
 <dependency>
  <groupId>ca.rmen</groupId>
  <artifactId>lib-sunrise-sunset</artifactId>
- <version>1.1.0</version>
+ <version>1.1.1</version>
  <scope>compile</scope>
 </dependency>
 ```
 
 Any other build system:
 -------------------
+
 Alternatively, you can just copy the single java file into your project:
 [library/src/main/java/ca/rmen/sunrisesunset/SunriseSunset.java](library/src/main/java/ca/rmen/sunrisesunset/SunriseSunset.java)
+
 Using the library
 =================
 To get the sunrise and sunset times for today in Paris, France:

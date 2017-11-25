@@ -67,7 +67,7 @@ public final class SunriseSunset {
 	private static final int JULIAN_DATE_2000_01_01 = 2451545;
 	private static final double CONST_0009 = 0.0009;
 	private static final double CONST_360 = 360;
-	private static final long SECONDS_IN_DAY = 60 * 60 * 24;
+	private static final long MILLISECONDS_IN_DAY = 60 * 60 * 24 * 1000;
 
 	/**
 	 * Intermediate variables used in the sunrise equation
@@ -617,8 +617,8 @@ public final class SunriseSunset {
 	 * @param latitude  the latitude of the location in degrees.
 	 * @param longitude the longitude of the location in degrees (West is negative)
 	 * @param calendar the given datetime to check for twilight
-     * @return true if at the given location and calendar, it is civil, nautical, or astronomical twilight.
-     */
+	 * @return true if at the given location and calendar, it is civil, nautical, or astronomical twilight.
+	 */
 	public static boolean isTwilight(Calendar calendar, double latitude, double longitude) {
 		return isCivilTwilight(calendar, latitude, longitude)
 				|| isNauticalTwilight(calendar, latitude, longitude)
@@ -639,15 +639,15 @@ public final class SunriseSunset {
 	 * @param calendar the datetime for which to determine the day length
 	 * @param latitude  the latitude of the location in degrees.
 	 * @param longitude the longitude of the location in degrees (West is negative)
-     * @return the number of milliseconds between sunrise and sunset.
-     */
+	 * @return the number of milliseconds between sunrise and sunset.
+	 */
 	public static long getDayLength(Calendar calendar, double latitude, double longitude) {
 		Calendar[] sunriseSunset = getSunriseSunset(calendar, latitude, longitude);
 		if (sunriseSunset == null) {
 			int month = calendar.get(Calendar.MONTH); // Reminder: January = 0
 			if (latitude > 0) {
 				if (month >= 3 && month <= 10) {
-					return SECONDS_IN_DAY; // Always day at the north pole in June
+					return MILLISECONDS_IN_DAY; // Always day at the north pole in June
 				} else {
 					return 0; // Always night at the north pole in December
 				}
@@ -655,11 +655,11 @@ public final class SunriseSunset {
 				if (month >= 3 && month <= 10) {
 					return 0; // Always night at the south pole in June
 				} else {
-					return SECONDS_IN_DAY; // Always day at the south pole in December
+					return MILLISECONDS_IN_DAY; // Always day at the south pole in December
 				}
 			}
 		}
-		return (sunriseSunset[1].getTimeInMillis() - sunriseSunset[0].getTimeInMillis()) / 1000;
+		return sunriseSunset[1].getTimeInMillis() - sunriseSunset[0].getTimeInMillis();
 	}
 
 }
