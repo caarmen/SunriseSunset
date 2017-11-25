@@ -659,7 +659,7 @@ public final class SunriseSunset {
 				}
 			}
 		}
-		return (sunriseSunset[1].getTimeInMillis() - sunriseSunset[0].getTimeInMillis()) / 1000;
+		return sunriseSunset[1].getTimeInMillis() - sunriseSunset[0].getTimeInMillis();
 	}
 
 }
