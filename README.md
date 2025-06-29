@@ -24,7 +24,7 @@ maven { url "https://dl.bintray.com/caarmen/maven/" }
 
 Declare the dependency:
 ```
-compile 'ca.rmen:lib-sunrise-sunset:1.1.1'
+compile 'ca.rmen:lib-sunrise-sunset:1.1.2'
 ```
 Maven:
 ------
@@ -40,7 +40,7 @@ Declare the dependency:
 <dependency>
  <groupId>ca.rmen</groupId>
  <artifactId>lib-sunrise-sunset</artifactId>
- <version>1.1.1</version>
+ <version>1.1.2</version>
  <scope>compile</scope>
 </dependency>
 ```
@@ -84,12 +84,12 @@ or build it with `mvn clean package`, which will place it in `cli/target`.
 Usage:
 
 ```
-java -jar /path/to/sunrise-sunset-cli-1.1.1.jar <timezone> <yyyyMMdd> <latitude> <longitude>
+java -jar /path/to/sunrise-sunset-cli-1.1.2.jar <timezone> <yyyyMMdd> <latitude> <longitude>
 ```
 
 Example usage:
 ```
-java -jar /path/to/sunrise-sunset-cli-1.1.1.jar Europe/Paris 20171125 48.8 2.35
+java -jar /path/to/sunrise-sunset-cli-1.1.2.jar Europe/Paris 20171125 48.8 2.35
 Current time at: 48.8,2.35:
   2017-11-25 18:01:42 Central European Time
 Current day period is NAUTICAL_TWILIGHT
