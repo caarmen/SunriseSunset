@@ -24,3 +24,34 @@ mvn install:install-file \
   -Djavadoc="library/target/lib-sunrise-sunset-${version}-javadoc.jar" \
   -Dsources="library/target/lib-sunrise-sunset-${version}-sources.jar"
 echo "${logprefix}: Done."
+
+# Release
+echo "${logprefix}: Creating bundle for distribution"
+# Copy the already signed library artifacts to a temporary directory.
+tmpdir=$(mktemp --directory -t bundle -p /tmp/)
+destdir="${tmpdir}/ca/rmen/lib-sunrise-sunset/${version}"
+srcdir=library/target
+bundle_file="target/bundle-${version}.jar"
+mkdir -p "${destdir}"
+cp -pr "${srcdir}"/*.jar* "${destdir}"
+
+# Copy the publish.pom file and to the target diretory and sign it.
+cp publish.pom "${destdir}/lib-sunrise-sunset-${version}.pom"
+if [ "${GPGKEY}" != "" ]
+then
+  gpg --local-user "${GPGKEY}" -ab "${destdir}/lib-sunrise-sunset-${version}.pom"
+fi
+
+# Add md5 and sha files for all the artifacts.
+for file in "${destdir}"/*.jar "${destdir}"/*.asc "${destdir}"/*.pom
+do
+  md5 -q "${file}" > "${file}".md5
+  for algo in 1 256 512
+  do
+    shasum -a "${algo}" "${file}" | awk '{ print $1 }' > "${file}.sha${algo}"
+  done
+done
+
+# Create a bundle containing everything (jar, asc, pom files, and all their md5 and sha corresponding files).
+jar cfM "${bundle_file}" -C "${tmpdir}" ca
+echo "${logprefix} created ${bundle_file}"
