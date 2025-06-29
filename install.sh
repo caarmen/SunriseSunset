@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 logprefix=$0
 echo "$logprefix: Rebuilding project..."
 mvn clean package
